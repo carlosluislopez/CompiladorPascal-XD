@@ -18,10 +18,15 @@ TEMPLATE = app
 SOURCES += main.cpp \
     token.cpp \
     contentreader.cpp \
-    lexer.cpp
+    lexer.cpp \
+    parser.cpp \
+    utileria.cpp
 
 HEADERS += \
     token.h \
     lexicalexception.h \
     contentreader.h \
-    lexer.h
+    lexer.h \
+    parser.h \
+    ParserException.h \
+    utileria.h

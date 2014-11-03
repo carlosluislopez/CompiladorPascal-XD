@@ -4,6 +4,7 @@
 #include <string>
 #include <exception>
 #include "lexer.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -34,27 +35,31 @@ int main(int argc, char *argv[])
     reader->Content = contenido;
 
     Lexer *lexico = new Lexer(reader);
+    Parser *parser = new Parser(lexico);
 
-    Token *current = new Token();
     try
     {
-        current = lexico->NextToken();
+        parser->Parse();
     }catch(LexicalException &lexEx)
     {
         cout << lexEx.what() << '\n';
     }
-
-    while(current->Type != EndOfFile)
+    catch(ParserException &parEx)
     {
-        cout <<"Line: " << current->Line << " \tCol: " << current->Column << "\tType: " << current->Type << " \t" << "\tLexeme: " << current->Lexeme << endl;
-        try
-        {
-            current = lexico->NextToken();
-        }catch(LexicalException &lexEx)
-        {
-            cout << lexEx.what() << '\n';
-            break;
-        }
+        cout << parEx.what() << '\n';
     }
+
+//    while(current->Type != EndOfFile)
+//    {
+//        cout <<"Line: " << current->Line << " \tCol: " << current->Column << "\tType: " << current->Type << " \t" << "\tLexeme: " << current->Lexeme << endl;
+//        try
+//        {
+//            current = lexico->NextToken();
+//        }catch(LexicalException &lexEx)
+//        {
+//            cout << lexEx.what() << '\n';
+//            break;
+//        }
+//    }
     return a.exec();
 }

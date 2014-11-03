@@ -13,6 +13,7 @@ enum TokenType
     Array,
     Binary,
     Hexadecimal,
+    HTML,
 
     Id,
     EndOfFile,

@@ -2,7 +2,7 @@
 
 Lexer::Lexer(ContentReader *contentReader)
 {
-    stateHTML = false;
+    stateHTML = true;
     this->contentReader = contentReader;
     currentSymbol = this->contentReader->NextSymbol();
 
@@ -135,11 +135,17 @@ Token * Lexer::NextToken()
 
     string symbol;
 
-    if(stateHTML)
-        return NextHTMLToken();
-
     while (true)
     {
+        if(stateHTML)
+        {
+            Token *tokenTemp = NextHTMLToken();
+            if(tokenTemp != 0 && tokenTemp->Lexeme.length() > 0)
+            {
+                return tokenTemp;
+            }
+        }
+
         symbol = "";
         symbol += currentSymbol;
         switch (currentState)
@@ -326,26 +332,20 @@ Token * Lexer::NextToken()
 
                 lexeme += currentSymbol;
                 currentSymbol = contentReader->NextSymbol();
-                token->Lexeme = lexeme;
                 token->Type = tripleSymbolDictionary[toLower(lexeme)];
 
-                if(token->Type == OP_LeftxD)
-                    stateHTML = false;
-                else
-                    stateHTML = true;
-
-                return token;
+                if(token->Type == OP_RightxD)
+                    stateHTML = true;;
+                currentState = 0;
                 break;
             case 11:
                 token->Lexeme = lexeme;
                 token->Type = tripleSymbolDictionary[toLower(lexeme)];
 
-                if(token->Type == OP_LeftxD)
-                    stateHTML = false;
-                else
+                if(token->Type == OP_RightxD)
                     stateHTML = true;
 
-                return token;
+                currentState = 0;
                 break;
             case 12:
                 token->Lexeme = lexeme;
@@ -514,8 +514,51 @@ Token * Lexer::NextToken()
  }
 
 Token * Lexer::NextHTMLToken(){
-
+    string lexeme = "";
     Token *token = new Token();
 
+    token->Column = contentReader->CurrentColumn;
+    token->Line = contentReader->CurrentLine;
+
+    string xd = "";
+
+    while (true)
+    {
+        if(xd.length() < 3){
+            xd += currentSymbol;
+        }
+        else{
+            for (std::string::size_type i = 1; i < xd.length(); ++i)
+            {
+                xd[i-1] = xd[i];
+            }
+            xd[xd.length()-1] = currentSymbol;
+        }
+
+        if(containsKey(this->tripleSymbolDictionary, toLower(xd)))
+        {
+            currentSymbol = contentReader->NextSymbol();
+            TokenType type;
+            type = tripleSymbolDictionary[toLower(xd)];
+            stateHTML = false;
+
+            string lexemTemp = lexeme.substr(0, lexeme.length()-3);
+
+            token->Lexeme = lexemTemp;
+            token->Type = HTML;
+            return token;
+        }
+
+        lexeme += currentSymbol;
+        currentSymbol = contentReader->NextSymbol();
+
+        if (currentSymbol == '\0')
+        {
+            stateHTML = false;
+            token->Lexeme = lexeme;
+            token->Type = HTML;
+            return token;
+        }
+    }
     return token;
 }
