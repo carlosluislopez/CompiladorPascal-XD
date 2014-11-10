@@ -35,6 +35,7 @@ private:
     std::string toString(int);
 	std::string toLower(string);
     std::string toLower(char);
+    std::string trim(string);
     bool stateHTML;
     Token * NextHTMLToken();
 

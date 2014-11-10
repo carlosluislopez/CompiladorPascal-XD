@@ -26,19 +26,22 @@ Lexer::Lexer(ContentReader *contentReader)
     singleSymbolDictionary.insert(make_pair(string("-"), Op_Substract));
     singleSymbolDictionary.insert(make_pair(string("*"), Op_Multiply));
     singleSymbolDictionary.insert(make_pair(string("/"), Op_Divide));
+    singleSymbolDictionary.insert(make_pair(string("^"), Op_Exp));
 
     doubleSymbolDictionary.insert(make_pair(string(":"), Colon));
     doubleSymbolDictionary.insert(make_pair(string("="), Op_Equals));
     doubleSymbolDictionary.insert(make_pair(string(":="), Op_Assign));
     doubleSymbolDictionary.insert(make_pair(string("<>"), Op_NotEquals));
+    doubleSymbolDictionary.insert(make_pair(string("!="), Op_NotEquals));
     doubleSymbolDictionary.insert(make_pair(string("<"), Op_LessThan));
     doubleSymbolDictionary.insert(make_pair(string(">"), Op_GreaterThan));
     doubleSymbolDictionary.insert(make_pair(string("<="), Op_LessEqualThan));
     doubleSymbolDictionary.insert(make_pair(string(">="), Op_GreaterEqualThan));
-    doubleSymbolDictionary.insert(make_pair(string(".."), Range));
+
 
     tripleSymbolDictionary.insert(make_pair(string("<xd"), OP_LeftxD));
     tripleSymbolDictionary.insert(make_pair(string("xd>"), OP_RightxD));
+    doubleSymbolDictionary.insert(make_pair(string(".."), Op_Range));
 
     reservedWordsDictionary.insert(make_pair(string("div"), Rw_Div));
     reservedWordsDictionary.insert(make_pair(string("mod"), Rw_Mod));
@@ -74,6 +77,8 @@ Lexer::Lexer(ContentReader *contentReader)
     reservedWordsDictionary.insert(make_pair(string("do"), Rw_Do));
     reservedWordsDictionary.insert(make_pair(string("var"), Rw_Var));
     reservedWordsDictionary.insert(make_pair(string("downto"), Rw_Downto));
+    reservedWordsDictionary.insert(make_pair(string("true"), Rw_True));
+    reservedWordsDictionary.insert(make_pair(string("false"), Rw_False));
 
     reservedWordsDictionary.insert(make_pair(string("integer"), Rw_Int));
     reservedWordsDictionary.insert(make_pair(string("float"), Rw_Float));
@@ -122,6 +127,30 @@ string Lexer::toLower(char symbol)
     result+= std::tolower(symbol, loc);
 
     return result;
+}
+
+string Lexer::trim(string str)
+{
+    int i = 0;
+    for (std::string::size_type i = 0; i< str.length(); ++i)
+    {
+        if (!isspace(str[i]))
+            break;
+        i++;
+    }
+
+    string trimmed = str.substr(i, (str.length()-i));
+
+    i = 0;
+    for (std::string::size_type i = 0; i< str.length(); ++i)
+    {
+        if (isspace(str[i]))
+            break;
+        i++;
+    }
+
+    trimmed = trimmed.substr(0, i);
+    return trimmed;
 }
 
 Token * Lexer::NextToken()
@@ -306,7 +335,7 @@ Token * Lexer::NextToken()
                 }
                 break;
             case 8:
-                if (containsKey(doubleSymbolDictionary, toLower(lexeme)))
+                if (containsKey(doubleSymbolDictionary, toLower(lexeme) + toLower(symbol)))
                 {
                     lexeme += currentSymbol;
                     currentState = 9;
@@ -419,7 +448,7 @@ Token * Lexer::NextToken()
                 break;
             case 32:
                 token->Lexeme = lexeme;
-                token->Type = String;
+                token->Type = Char;
                 return token;
                 break;
             case 40:

@@ -13,8 +13,9 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
     
     string line;
-    ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
 
+    ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
+    //ifstream myfile ("C:\\Users\\carlo_000\\Documents\\GitHub\\CompiladorPascal-XD\\example.txt");
     string contenido = "";
 
     if (myfile.is_open())
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
     try
     {
         parser->Parse();
+        cout << "Sintaxis Correcta" << '\n';
     }catch(LexicalException &lexEx)
     {
         cout << lexEx.what() << '\n';

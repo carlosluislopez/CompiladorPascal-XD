@@ -1,0 +1,24 @@
+<xD
+	//{Declaracion de tipos,variables y funciones deben de ir primero SIEMPRE!!!!!}
+	Var
+		A,B: integer;
+	//function max(num1, num2: integer): integer;
+	var
+		result: integer;
+	begin
+		if (num1 > num2) then
+			result := num1
+		else
+			result := num2;
+		max := result;
+	end;
+xD>
+<html>
+	<xD
+		A:= Get('A');
+		B:= Get('B');
+	xD>
+	<div>
+		<xD Print max(A,B); xD>
+	</div>
+</html>
