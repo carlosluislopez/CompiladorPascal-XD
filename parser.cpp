@@ -5,7 +5,6 @@ Parser::Parser(Lexer *lexer)
     this->_lexer = lexer;
     validHTML = false;
     this->currentToken = nextToken();
-
 }
 
 void Parser::Parse()
@@ -293,13 +292,13 @@ void Parser::Procedimiento()
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
         currentToken = nextToken();
-        Lista_Declaraciones();
+        Lista_DeclaracionesP();
 
 
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        Lista_Sentencias();
+        Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -374,13 +373,13 @@ void Parser::Funcion()
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
         currentToken = nextToken();
-        Lista_Declaraciones();
+        Lista_DeclaracionesP();
 
 
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        Lista_Sentencias();
+        Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -395,8 +394,24 @@ void Parser::Funcion()
 
 void Parser::Lista_Sentencias()
 {
+    if(this->currentToken->Type != Rw_Begin)
+        throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    currentToken = nextToken();
+
+    Lista_SentenciasP();
+
+    if(this->currentToken->Type != Rw_End)
+        throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    currentToken = nextToken();
+
+    if(this->currentToken->Type != Dot)
+        throw ParserException("Se esperaba un '.'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    currentToken = nextToken();
+}
+
+void Parser::Lista_SentenciasP()
+{
     if(this->currentToken->Type == Id
-       || this->currentToken->Type == Rw_Begin
        || this->currentToken->Type == Rw_For
        || this->currentToken->Type == Rw_While
        || this->currentToken->Type == Rw_Do
@@ -407,7 +422,7 @@ void Parser::Lista_Sentencias()
       )
     {
         Sentencia();
-        Lista_Sentencias();
+        Lista_SentenciasP();
     }else{ /* EPSILON */ }
 }
 
@@ -423,17 +438,20 @@ void Parser::Sentencia()
         Case();
     }else if(currentToken->Type == Rw_For){
         For();
+    }else if(currentToken->Type == Rw_Do){
+        DoWhile();
+    }else if(currentToken->Type == Rw_While){
+        While();
     }else{
         throw ParserException("Se esperaba una sentencia valida; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     }
 }
 
-void Parser::Assign()
-{
+void Parser::Assign(){
     if(currentToken->Type == Id){
         ID();
         if(currentToken->Type != Op_Assign)
-            throw ParserException("Se esperaba un '='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+            throw ParserException("Se esperaba un ':='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
         ExpresionBooleana();
         if(currentToken->Type != SemiColon)
@@ -442,10 +460,9 @@ void Parser::Assign()
     }else{ /* EPSILON */ }
 }
 
-void Parser::If()
-{
-    if(currentToken->Type == Rw_If)
-    {
+
+void Parser::If(){
+    if(currentToken->Type == Rw_If){
         currentToken = nextToken();
         if(currentToken->Type != LeftParenthesis)
             throw ParserException("Se esperaba un '('; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -463,7 +480,7 @@ void Parser::If()
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
 
-        Lista_Sentencias();
+        Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -476,7 +493,7 @@ void Parser::If()
                 throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
             currentToken = nextToken();
 
-            Lista_Sentencias();
+            Lista_SentenciasP();
 
             if(currentToken->Type != Rw_End)
                 throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -485,6 +502,7 @@ void Parser::If()
 
     }else{ /* EPSILON */ }
 }
+
 
 void Parser::Case()
 {
@@ -516,6 +534,7 @@ void Parser::Case()
     }else{ /* EPSILON */ }
 }
 
+
 void Parser::CaseP()
 {
     if(currentToken->Type == Int
@@ -534,7 +553,7 @@ void Parser::CaseP()
             throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
         currentToken = nextToken();
-        Lista_Sentencias();
+        Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -551,9 +570,11 @@ void Parser::CaseP()
         throw ParserException("Se esperaba un entero o char; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 }
 
+
 void Parser::For()
 {
-    if(currentToken->Type == Rw_For){
+    if(currentToken->Type == Rw_For)
+    {
         currentToken = nextToken();
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un Id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -575,18 +596,91 @@ void Parser::For()
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        Lista_Sentencias();
+        Lista_SentenciasP();
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
     }else{ /* EPSILON */ }
 }
 
-void Parser::While(){}
 
-void Parser::DoWhile(){}
+
+void Parser::While()
+{
+    if(currentToken->Type == Rw_While){
+        currentToken = nextToken();
+        if(currentToken->Type != LeftParenthesis)
+            throw ParserException("Se esperaba un '('; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        ExpresionBooleana();
+
+        if(currentToken->Type != RightParenthesis)
+            throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != Rw_Do)
+            throw ParserException("Se esperaba un 'Do'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != Rw_Begin)
+            throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        Lista_SentenciasP();
+
+        if(currentToken->Type != Rw_End)
+            throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != SemiColon)
+            throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+    }else{ /* EPSILON */ }
+}
+
+
+
+void Parser::DoWhile()
+{
+    if(currentToken->Type == Rw_Do){
+        currentToken = nextToken();
+
+        if(currentToken->Type != Rw_Begin)
+            throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        Lista_SentenciasP();
+
+        if(currentToken->Type != Rw_End)
+            throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != Rw_While)
+            throw ParserException("Se esperaba un 'While'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != LeftParenthesis)
+            throw ParserException("Se esperaba un '('; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        ExpresionBooleana();
+
+        if(currentToken->Type != RightParenthesis)
+            throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+        if(currentToken->Type != SemiColon)
+            throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        currentToken = nextToken();
+
+    }else{ /* EPSILON */ }
+}
+
 
 void Parser::Procedimientos(){}
+
 
 void Parser::Print()
 {
@@ -599,11 +693,13 @@ void Parser::Print()
     }else{ /* EPSILON */ }
 }
 
+
 void Parser::ExpresionBooleana()
 {
     Expresion();
     ExpresionBooleanaP();
 }
+
 
 void Parser::ExpresionBooleanaP()
 {
@@ -644,11 +740,13 @@ void Parser::ExpresionBooleanaP()
     }else { /* EPSILON */ }
 }
 
+
 void Parser::Expresion()
 {
     Factor();
     ExpresionP();
 }
+
 
 void Parser::ExpresionP()
 {
@@ -665,11 +763,13 @@ void Parser::ExpresionP()
     }else { /* EPSILON */ }
 }
 
+
 void Parser::Factor()
 {
     Termino();
     FactorP();
 }
+
 
 void Parser::FactorP()
 {
@@ -701,6 +801,7 @@ void Parser::FactorP()
         FactorP();
     }else { /* EPSILON */ }
 }
+
 
 void Parser::Termino()
 {
@@ -741,11 +842,13 @@ void Parser::Termino()
     }
 }
 
+
 void Parser::ID()
 {
     currentToken = nextToken();
     Lista_Accesor();
 }
+
 
 void Parser::Lista_Accesor()
 {
@@ -759,6 +862,7 @@ void Parser::Lista_Accesor()
     }
     else { /* EPSILON */ }
 }
+
 
 void Parser::SingleAccesor()
 {
@@ -788,11 +892,13 @@ void Parser::SingleAccesor()
     }
 }
 
+
 void Parser::Lista_Expresiones()
 {
     Expresion();
     Lista_ExpresionesP();
 }
+
 
 void Parser::Lista_ExpresionesP()
 {
@@ -804,6 +910,9 @@ void Parser::Lista_ExpresionesP()
     }
     else { /* EPSILON */ }
 }
+
+
+
 
 
 

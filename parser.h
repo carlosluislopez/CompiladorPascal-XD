@@ -29,6 +29,7 @@ private:
     void Lista_Procedimientos();
     void Lista_Funciones();
     void Lista_Sentencias();
+    void Lista_SentenciasP();
 
     void Array();
     void Record();
