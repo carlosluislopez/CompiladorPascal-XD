@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     
     string line;
 
-    //ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
-    ifstream myfile ("C:\\Users\\clopez\\Documents\\UNITEC\\Compiladores\\example.txt");
+    ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
+    //ifstream myfile ("C:\\Users\\clopez\\Documents\\UNITEC\\Compiladores\\example.txt");
     string contenido = "";
 
     if (myfile.is_open())

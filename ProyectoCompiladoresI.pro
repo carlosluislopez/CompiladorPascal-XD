@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     contentreader.cpp \
     lexer.cpp \
     parser.cpp \
-    utileria.cpp
+    utileria.cpp \
+    printnode.cpp
 
 HEADERS += \
     token.h \
@@ -29,4 +30,9 @@ HEADERS += \
     lexer.h \
     parser.h \
     ParserException.h \
-    utileria.h
+    utileria.h \
+    StatementNode.h \
+    printnode.h \
+    ExpresionValue.h \
+    BaseType.h \
+    ExpresionNode.h
