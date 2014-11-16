@@ -21,7 +21,11 @@ SOURCES += main.cpp \
     lexer.cpp \
     parser.cpp \
     utileria.cpp \
-    printnode.cpp
+    printnode.cpp \
+    stringtype.cpp \
+    fieldaccesor.cpp \
+    arrayaccesor.cpp \
+    idnode.cpp
 
 HEADERS += \
     token.h \
@@ -35,4 +39,9 @@ HEADERS += \
     printnode.h \
     ExpresionValue.h \
     BaseType.h \
-    ExpresionNode.h
+    ExpresionNode.h \
+    stringtype.h \
+    Accesor.h \
+    fieldaccesor.h \
+    arrayaccesor.h \
+    idnode.h

@@ -12,7 +12,7 @@ public:
     //LexicalException();
     ParserException(const string m = "Lexical Exception") : msg(m) { }
     //~LexicalException(void);
-    const char* what() {return msg.c_str(); }
+    const char* what() { return msg.c_str(); }
 private:
     string msg;
 };

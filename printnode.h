@@ -13,6 +13,6 @@ public:
     ExpresionNode *Value;
     void ValidateSemantics();
     void Interpret();
-
+    string ToXML(int identation);
 };
 #endif // PRINTNODE_H

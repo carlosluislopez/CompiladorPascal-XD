@@ -93,8 +93,8 @@ bool Lexer::containsKey(Mapa mapa, string symbol)
     TokenType type;
     if(it != mapa.end())
     {
-       type = it->second;
-       return true;
+        type = it->second;
+        return true;
     }
     return false;
 }

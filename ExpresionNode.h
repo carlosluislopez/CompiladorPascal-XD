@@ -3,15 +3,15 @@
 
 #include "BaseType.h"
 #include "ExpresionValue.h"
+#include "utileria.h"
 
 class ExpresionNode
 {
 public:
-    ExpresionNode(){}
-    ~ExpresionNode(){}
-    virtual float Evaluate() = 0;
-    virtual BaseType *ValidateSemantics() = 0;
-    virtual ExpresionValue *Interpret() = 0;
+    virtual BaseType *ValidateSemantics() const = 0;
+    virtual ExpresionValue *Interpret() const = 0;
+    virtual string ToXML(int identation) = 0;
+    Utileria util;
 };
 
 #endif // EXPRESIONNODE_H

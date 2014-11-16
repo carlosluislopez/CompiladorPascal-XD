@@ -17,6 +17,7 @@ public:
     string toString(int);
     string toLower(string);
     string toLower(char);
+    string getMeIdentation(int identation);
 };
 
 #endif // UTILERIA_H

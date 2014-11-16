@@ -34,3 +34,12 @@ string Utileria::toLower(char symbol)
 
     return result;
 }
+
+
+string Utileria::getMeIdentation(int identation)
+{
+    std::string str = "";
+    for (int i = 0; i < identation; i++)
+        str += " ";
+    return str;
+}
