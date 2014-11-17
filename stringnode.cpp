@@ -17,5 +17,14 @@ ExpresionValue * StringNode::Interpret() const{
 }
 
 string StringNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation);
+    xml += "<StringNode>\n";
+    xml += util.getMeIdentation(identation + 1);
+    xml += Value + "\n";
+    xml += util.getMeIdentation(identation);
+    xml += "</StringNode>\n";
+
+    return xml;
 }

@@ -13,6 +13,24 @@ std::string Utileria::toString(int obj)
     return objStr;
 }
 
+std::string Utileria::toStringFloat(float obj)
+{
+    std::ostringstream objStream;
+    objStream << obj;
+    std::string objStr(objStream.str());
+    return objStr;
+}
+
+
+std::string Utileria::toStringBool(bool obj)
+{
+    std::ostringstream objStream;
+    objStream << boolalpha << obj;
+    std::string objStr(objStream.str());
+    return objStr;
+}
+
+
 string Utileria::toLower(string symbol)
 {
     std::locale loc;
@@ -39,7 +57,7 @@ string Utileria::toLower(char symbol)
 string Utileria::getMeIdentation(int identation)
 {
     std::string str = "";
-    for (int i = 0; i < identation; i++)
+    for (int i = 0; i < (identation * 4); i++)
         str += " ";
     return str;
 }

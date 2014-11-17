@@ -15,6 +15,8 @@ class Utileria
 public:
     Utileria();
     string toString(int);
+    string toStringFloat(float);
+    string toStringBool(bool);
     string toLower(string);
     string toLower(char);
     string getMeIdentation(int identation);

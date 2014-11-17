@@ -17,5 +17,19 @@ ExpresionValue * SumOperatorNode::Interpret() const{
 }
 
 string SumOperatorNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation) + "<SumOperatorNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<LeftOperandNode>\n";
+    xml += LeftOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</LeftOperandNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<RightOperandNode>\n";
+    xml += RightOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</RightOperandNode>\n";
+
+    xml += util.getMeIdentation(identation) + "</SumOperatorNode>\n";
+
+    return xml;
 }

@@ -18,5 +18,14 @@ ExpresionValue * BoolNode::Interpret() const{
 }
 
 string BoolNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation);
+    xml += "<BoolNode>\n";
+    xml += util.getMeIdentation(identation + 1);
+    xml += util.toStringBool(Value) + "\n";
+    xml += util.getMeIdentation(identation);
+    xml += "</BoolNode>\n";
+
+    return xml;
 }

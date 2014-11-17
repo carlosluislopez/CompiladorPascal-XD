@@ -392,13 +392,13 @@ void Parser::Funcion()
     }else{ /* EPSILON */ }
 }
 
-void Parser::Lista_Sentencias()
+list<StatementNode *> * Parser::Lista_Sentencias()
 {
     if(this->currentToken->Type != Rw_Begin)
         throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     currentToken = nextToken();
 
-    Lista_SentenciasP();
+    list<StatementNode*> *listStatement = Lista_SentenciasP();
 
     if(this->currentToken->Type != Rw_End)
         throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -407,9 +407,11 @@ void Parser::Lista_Sentencias()
     if(this->currentToken->Type != Dot)
         throw ParserException("Se esperaba un '.'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     currentToken = nextToken();
+
+    return listStatement;
 }
 
-void Parser::Lista_SentenciasP()
+list<StatementNode *> * Parser::Lista_SentenciasP()
 {
     if(this->currentToken->Type == Id
        || this->currentToken->Type == Rw_For
@@ -421,23 +423,31 @@ void Parser::Lista_SentenciasP()
        || this->currentToken->Type == Rw_Case
       )
     {
-        Sentencia();
-        Lista_SentenciasP();
-    }else{ /* EPSILON */ }
+
+        StatementNode *statementNode = Sentencia();
+        list<StatementNode*> *listStatement = Lista_SentenciasP();
+        listStatement->insert(listStatement->begin(), statementNode);
+
+        return listStatement;
+    }else
+    {
+        return new list<StatementNode*>();
+        /* EPSILON */
+    }
 }
 
-void Parser::Sentencia()
+StatementNode * Parser::Sentencia()
 {
     if(currentToken->Type == Rw_Print){
-        Print();
+        return Print();
     }else if(currentToken->Type == Id){
-        Assign();
+        return Assign();
     }else if(currentToken->Type == Rw_If){
         If();
     }else if(currentToken->Type == Rw_Case){
         Case();
     }else if(currentToken->Type == Rw_For){
-        For();
+        return For();
     }else if(currentToken->Type == Rw_Do){
         DoWhile();
     }else if(currentToken->Type == Rw_While){
@@ -447,17 +457,28 @@ void Parser::Sentencia()
     }
 }
 
-void Parser::Assign(){
+StatementNode * Parser::Assign(){
     if(currentToken->Type == Id){
-        ID();
+        IdNode * idNode = ID();
         if(currentToken->Type != Op_Assign)
             throw ParserException("Se esperaba un ':='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        ExpresionBooleana();
+        ExpresionNode *expresionNode = ExpresionBooleana();
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-    }else{ /* EPSILON */ }
+
+        AssignationNode *statementNode = new AssignationNode();
+        statementNode->LeftValue = idNode;
+        statementNode->RightValue = expresionNode;
+
+        return statementNode;
+
+    }else
+    {
+        throw ParserException("Se esperaba una sentencia de asignacion; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        /* EPSILON */
+    }
 }
 
 
@@ -571,7 +592,7 @@ void Parser::CaseP()
 }
 
 
-void Parser::For()
+StatementNode * Parser::For()
 {
     if(currentToken->Type == Rw_For)
     {
@@ -682,15 +703,25 @@ void Parser::DoWhile()
 void Parser::Procedimientos(){}
 
 
-void Parser::Print()
+StatementNode *Parser::Print()
 {
-    if(currentToken->Type == Rw_Print){
+    if(currentToken->Type == Rw_Print)
+    {
         currentToken = nextToken();
-        ExpresionBooleana();
+        ExpresionNode *expresionNode = ExpresionBooleana();
         if (currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-    }else{ /* EPSILON */ }
+        PrintNode * statementNode = new PrintNode();
+        statementNode->Value = expresionNode;
+
+        return statementNode;
+
+    }else
+    {
+        throw ParserException("Se esperaba una sentencia Print; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        /* EPSILON */
+    }
 }
 
 

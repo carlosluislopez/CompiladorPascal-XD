@@ -3,16 +3,17 @@
 
 #include "StatementNode.h"
 #include "ExpresionNode.h"
-#include <iostream>
 
 using namespace std;
 
 class PrintNode: public StatementNode
 {
 public:
+    PrintNode();
+    ~PrintNode();
     ExpresionNode *Value;
-    void ValidateSemantics();
-    void Interpret();
+    void ValidateSemantics() const;
+    void Interpret() const;
     string ToXML(int identation);
 };
 #endif // PRINTNODE_H

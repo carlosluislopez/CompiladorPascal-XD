@@ -14,6 +14,7 @@ public:
     BaseType *ValidateSemantics() const;
     ExpresionValue *Interpret() const;
     string ToXML(int identation);
+    float Value;
 };
 
 #endif // FLOATNODE_H

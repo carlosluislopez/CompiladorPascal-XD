@@ -47,7 +47,9 @@ SOURCES += main.cpp \
     notoperatornode.cpp \
     divisionintegeroperationnode.cpp \
     modoperationnode.cpp \
-    expoperationnode.cpp
+    expoperationnode.cpp \
+    assignationnode.cpp \
+    fornode.cpp
 
 HEADERS += \
     token.h \
@@ -91,4 +93,9 @@ HEADERS += \
     SyntaxTree.h \
     divisionintegeroperationnode.h \
     modoperationnode.h \
-    expoperationnode.h
+    expoperationnode.h \
+    StatementTree.h \
+    Values.h \
+    Types.h \
+    assignationnode.h \
+    fornode.h

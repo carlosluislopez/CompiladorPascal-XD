@@ -17,6 +17,19 @@ ExpresionValue * MultiplyOperatorNode::Interpret() const{
 }
 
 string MultiplyOperatorNode::ToXML(int identation){
-    return "";
-    this->LeftOperandNode = 0;
+    string xml = "";
+
+    xml += util.getMeIdentation(identation) + "<MultiplyOperatorNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<LeftOperandNode>\n";
+    xml += LeftOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</LeftOperandNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<RightOperandNode>\n";
+    xml += RightOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</RightOperandNode>\n";
+
+    xml += util.getMeIdentation(identation) + "</MultiplyOperatorNode>\n";
+
+    return xml;
 }

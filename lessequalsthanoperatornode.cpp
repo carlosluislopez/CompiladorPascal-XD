@@ -18,5 +18,19 @@ ExpresionValue * LessEqualsThanOperatorNode::Interpret() const{
 }
 
 string LessEqualsThanOperatorNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation) + "<LessEqualsThanOperatorNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<LeftOperandNode>\n";
+    xml += LeftOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</LeftOperandNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<RightOperandNode>\n";
+    xml += RightOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</RightOperandNode>\n";
+
+    xml += util.getMeIdentation(identation) + "</LessEqualsThanOperatorNode>\n";
+
+    return xml;
 }

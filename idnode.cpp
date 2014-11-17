@@ -23,11 +23,9 @@ string IdNode::ToXML(int identation)
 {
     string xml = "";
 
-    xml = util.getMeIdentation(identation);
-    xml += "<IdNode>";
-    xml += Name;
-    xml += util.getMeIdentation(identation);
-    xml += "</IdNode>\n";
+    xml = util.getMeIdentation(identation) + "<IdNode>\n";
+    xml += util.getMeIdentation(identation + 1) + Name + "\n";
+    xml += util.getMeIdentation(identation) + "</IdNode>\n";
 
     return xml;
 }

@@ -13,6 +13,7 @@ public:
     BaseType *ValidateSemantics() const;
     ExpresionValue *Interpret() const;
     string ToXML(int identation);
+    int Value;
 };
 
 #endif // INTNODE_H

@@ -18,5 +18,14 @@ ExpresionValue * FloatNode::Interpret() const{
 }
 
 string FloatNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation);
+    xml += "<FloatNode>\n";
+    xml += util.getMeIdentation(identation + 1);
+    xml += util.toStringFloat(Value) + "\n";
+    xml += util.getMeIdentation(identation);
+    xml += "</FloatNode>\n";
+
+    return xml;
 }

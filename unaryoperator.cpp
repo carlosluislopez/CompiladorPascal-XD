@@ -17,5 +17,11 @@ ExpresionValue * UnaryOperator::Interpret() const{
 }
 
 string UnaryOperator::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml = util.getMeIdentation(identation) + "<UnaryOperator>\n";
+    xml += OperandNode->ToXML(identation + 1);
+    xml += util.getMeIdentation(identation) + "</UnaryOperator>\n";
+
+    return xml;
 }

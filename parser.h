@@ -5,10 +5,9 @@
 #include "lexer.h"
 #include "utileria.h"
 #include <list>
-#include "StatementNode.h"
-#include "BaseType.h"
-#include "ExpresionValue.h"
 #include "SyntaxTree.h"
+#include "Values.h"
+#include "Types.h"
 
 
 
@@ -35,8 +34,8 @@ private:
     void Lista_ProcedimientosFunciones();
     void Lista_Procedimientos();
     void Lista_Funciones();
-    void Lista_Sentencias();
-    void Lista_SentenciasP();
+    list<StatementNode *> *Lista_Sentencias();
+    list<StatementNode *> *Lista_SentenciasP();
 
     void Array();
     void Record();
@@ -56,16 +55,16 @@ private:
     void Funcion();
 
 
-    void Sentencia();
+    StatementNode *Sentencia();
 
-    void Assign();
+    StatementNode *Assign();
     void If();
     void Case();
-    void For();
+    StatementNode *For();
     void While();
     void DoWhile();
     void Procedimientos();
-    void Print();
+    StatementNode * Print();
 
     void CaseP();
 

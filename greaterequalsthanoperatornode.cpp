@@ -17,5 +17,19 @@ ExpresionValue * GreaterEqualsThanOperatorNode::Interpret() const{
 }
 
 string GreaterEqualsThanOperatorNode::ToXML(int identation){
-    return "";
+    string xml = "";
+
+    xml += util.getMeIdentation(identation) + "<GreaterEqualsThanOperatorNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<LeftOperandNode>\n";
+    xml += LeftOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</LeftOperandNode>\n";
+
+    xml += util.getMeIdentation(identation + 1) + "<RightOperandNode>\n";
+    xml += RightOperandNode->ToXML(identation + 2);
+    xml += util.getMeIdentation(identation + 1) + "</RightOperandNode>\n";
+
+    xml += util.getMeIdentation(identation) + "</GreaterEqualsThanOperatorNode>\n";
+
+    return xml;
 }
