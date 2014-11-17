@@ -21,7 +21,7 @@ string ArrayAccesor::ToXML(int identation)
     xml += "<ArrayAccesor>\n";
     xml += util.getMeIdentation(identation);
 
-//    for (std::list<ExpresionNode*>::iterator *it = Indexes->begin(); it != Indexes->end(); it++)
+//    for (std::list<ExpresionNode*>::iterator it = Indexes->begin(); it != Indexes->end(); it++)
 //    {
 //        xml += ((ExpresionNode*)it)->ToXML(identation + 1);
 //    }

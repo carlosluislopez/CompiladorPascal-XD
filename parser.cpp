@@ -694,148 +694,259 @@ void Parser::Print()
 }
 
 
-void Parser::ExpresionBooleana()
+ExpresionNode * Parser::ExpresionBooleana()
 {
-    Expresion();
-    ExpresionBooleanaP();
+    ExpresionNode *expresionNode = Expresion();
+    return ExpresionBooleanaP(expresionNode);
 }
 
 
-void Parser::ExpresionBooleanaP()
+ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
 {
     if(currentToken->Type == Op_Equals)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
+
+        ExpresionNode *expresionNode = Expresion();
+        EqualsOperatorNode *operatorNode = new EqualsOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
     }else if(currentToken->Type == Op_LessThan)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
+
+        ExpresionNode *expresionNode = Expresion();
+        LessThanOperatorNode *operatorNode = new LessThanOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
     }
     else if(currentToken->Type == Op_LessEqualThan)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
+
+        ExpresionNode *expresionNode = Expresion();
+        LessEqualsThanOperatorNode *operatorNode = new LessEqualsThanOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
     }
     else if(currentToken->Type == Op_GreaterThan)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
+
+        ExpresionNode *expresionNode = Expresion();
+        GreaterThanOperatorNode *operatorNode = new GreaterThanOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
+
     }
     else if(currentToken->Type == Op_GreaterEqualThan)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
+
+        ExpresionNode *expresionNode = Expresion();
+        GreaterEqualsThanOperatorNode *operatorNode = new GreaterEqualsThanOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
     }
     else if(currentToken->Type == Op_NotEquals)
     {
         currentToken = nextToken();
-        Expresion();
-        ExpresionBooleanaP();
-    }else { /* EPSILON */ }
+
+        ExpresionNode *expresionNode = Expresion();
+        NotEqualsOperatorNode *operatorNode = new NotEqualsOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = expresionNode;
+
+        return ExpresionBooleanaP(operatorNode);
+    }else
+    {
+        return paramNode;
+        /* EPSILON */
+    }
 }
 
 
-void Parser::Expresion()
+ExpresionNode * Parser::Expresion()
 {
-    Factor();
-    ExpresionP();
+    ExpresionNode * factor = Factor();
+    return ExpresionP(factor);
 }
 
 
-void Parser::ExpresionP()
+ExpresionNode * Parser::ExpresionP(ExpresionNode *paramNode)
 {
     if(currentToken->Type == Op_Sum)
     {
         currentToken = nextToken();
-        Factor();
-        ExpresionP();
+
+        ExpresionNode * factor = Factor();
+        MultiplyOperatorNode *operatorNode = new MultiplyOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = factor;
+
+        return ExpresionP(operatorNode);
     }else if(currentToken->Type == Op_Substract)
     {
         currentToken = nextToken();
-        Factor();
-        ExpresionP();
-    }else { /* EPSILON */ }
+
+        ExpresionNode * factor = Factor();
+        MultiplyOperatorNode *operatorNode = new MultiplyOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = factor;
+
+        return ExpresionP(operatorNode);
+    }else
+    {
+        return paramNode;
+        /* EPSILON */
+    }
 }
 
 
-void Parser::Factor()
+ExpresionNode * Parser::Factor()
 {
-    Termino();
-    FactorP();
+    ExpresionNode * termino = Termino();
+    return FactorP(termino);
 }
 
 
-void Parser::FactorP()
+ExpresionNode *Parser::FactorP(ExpresionNode *paramNode)
 {
     if(currentToken->Type == Op_Multiply)
     {
         currentToken = nextToken();
-        Termino();
-        FactorP();
+
+        ExpresionNode * termino = Termino();
+        MultiplyOperatorNode *operatorNode = new MultiplyOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = termino;
+
+        return FactorP(operatorNode);
     }
     if(currentToken->Type == Op_Divide)
     {
         currentToken = nextToken();
-        Termino();
-        FactorP();
+
+        ExpresionNode * termino = Termino();
+        DivisionOperatorNode *operatorNode = new DivisionOperatorNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = termino;
+
+        return FactorP(operatorNode);
+
     }if(currentToken->Type == Rw_Div)
     {
         currentToken = nextToken();
-        Termino();
-        FactorP();
+
+        ExpresionNode * termino = Termino();
+        DivisionIntegerOperationNode *operatorNode = new DivisionIntegerOperationNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = termino;
+
+        return FactorP(operatorNode);
     }if(currentToken->Type == Rw_Mod)
     {
         currentToken = nextToken();
-        Termino();
-        FactorP();
+
+        ExpresionNode * termino = Termino();
+        ModOperationNode *operatorNode = new ModOperationNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = termino;
+
+        return FactorP(operatorNode);
     }if(currentToken->Type == Op_Exp)
     {
         currentToken = nextToken();
-        Termino();
-        FactorP();
-    }else { /* EPSILON */ }
+
+        ExpresionNode * termino = Termino();
+        ExpOperationNode *operatorNode = new ExpOperationNode();
+        operatorNode->LeftOperandNode = paramNode;
+        operatorNode->RightOperandNode = termino;
+
+        return FactorP(operatorNode);
+    }else
+    {
+        return paramNode;
+        /* EPSILON */
+    }
 }
 
 
-void Parser::Termino()
+ExpresionNode *Parser::Termino()
 {
     if (currentToken->Type == Rw_Not)
     {
         currentToken = nextToken();
-        ExpresionBooleana();
+
+        ExpresionNode * termino = Termino();
+        NotOperatorNode * notOperatorNode = new NotOperatorNode();
+        notOperatorNode->OperandNode = termino;
+
+        return notOperatorNode;
     }else if(currentToken->Type == Id)
     {
-        ID();
-    }else if(currentToken->Type == Int
-             || currentToken->Type == Float
-             || currentToken->Type == Bool
-             || currentToken->Type == String
-             || currentToken->Type == Binary
-             || currentToken->Type == Hexadecimal
-             || currentToken->Type == Char
-            )
+        return ID();
+    }else if(currentToken->Type == Int)
     {
+        IntNode * intNode = new IntNode();
         currentToken = nextToken();
+        return intNode;
+    }else if(currentToken->Type == Float)
+    {
+        FloatNode * floatNode = new FloatNode();
+        currentToken = nextToken();
+        return floatNode;
+    }else if(currentToken->Type == Bool)
+    {
+        BoolNode * boolNode = new BoolNode();
+        currentToken = nextToken();
+        return boolNode;
+    }else if(currentToken->Type == String)
+    {
+        StringNode * stringNode = new StringNode();
+        currentToken = nextToken();
+        return stringNode;
+    }else if(currentToken->Type == Binary)
+    {
+        BinaryNode * binaryNode = new BinaryNode();
+        currentToken = nextToken();
+        return binaryNode;
+    }else if(currentToken->Type == Hexadecimal)
+    {
+        HexadecimalNode * hexadecimalNode = new HexadecimalNode();
+        currentToken = nextToken();
+        return hexadecimalNode;
+    }else if(currentToken->Type == Char)
+    {
+        CharNode * charNode = new CharNode();
+        currentToken = nextToken();
+        return charNode;
     }else if(currentToken->Type == LeftParenthesis)
     {
         currentToken = nextToken();
-        ExpresionBooleana();
+        ExpresionNode * expresionNode = ExpresionBooleana();
         if(currentToken->Type != RightParenthesis)
             throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
+        return expresionNode;
     }else if(currentToken->Type == LeftBrackets)
     {
         currentToken = nextToken();
-        ExpresionBooleana();
+        ExpresionNode * expresionNode = ExpresionBooleana();
         if(currentToken->Type != RightBrackets)
             throw ParserException("Se esperaba un ']'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
+        return expresionNode;
     }else
     {
         throw ParserException("Se esperaba un termino; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -843,49 +954,79 @@ void Parser::Termino()
 }
 
 
-void Parser::ID()
+IdNode * Parser::ID()
 {
+    string name = currentToken->Lexeme;
     currentToken = nextToken();
-    Lista_Accesor();
+    Accesor * accesorList = Lista_Accesor();
+
+    IdNode * id = new IdNode();
+    id->Name = name;
+    id->AccesorList = accesorList;
+
+    return id;
 }
 
 
-void Parser::Lista_Accesor()
+Accesor * Parser::Lista_Accesor()
 {
     if (currentToken->Type == Dot
         || currentToken->Type == LeftParenthesis
         || currentToken->Type == LeftBrackets
        )
     {
-        SingleAccesor();
-        Lista_Accesor();
+        Accesor * accesor = SingleAccesor();
+        Accesor * accesorList = Lista_Accesor();
+        accesor->Next = accesorList;
+
+        return accesor;
     }
-    else { /* EPSILON */ }
+    else
+    {
+        return 0;
+        /* EPSILON */
+    }
 }
 
 
-void Parser::SingleAccesor()
+Accesor * Parser::SingleAccesor()
 {
     if(currentToken->Type == LeftParenthesis)
     {
         currentToken = nextToken();
-        Lista_Expresiones();
+        list<ExpresionNode*> *listExpresion = Lista_Expresiones();
         if(currentToken->Type != RightParenthesis)
             throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
+
+        ArrayAccesor * array = new ArrayAccesor();
+        array->Indexes = listExpresion;
+        return array;
+
     } else if(currentToken->Type == LeftBrackets)
     {
         currentToken = nextToken();
-        Lista_Expresiones();
+        list<ExpresionNode*> *listExpresion = Lista_Expresiones();
         if(currentToken->Type != RightBrackets)
             throw ParserException("Se esperaba un ']'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
+
+        ArrayAccesor * array = new ArrayAccesor();
+        array->Indexes = listExpresion;
+        return array;
+
     }else if(currentToken->Type == Dot)
     {
         currentToken = nextToken();
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un Id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        string id = currentToken->Lexeme;
         currentToken = nextToken();
+
+        FieldAccesor *field = new FieldAccesor();
+        field->Id = id;
+
+        return field;
     }else
     {
         throw ParserException("Se esperaba un Accesor; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -893,22 +1034,33 @@ void Parser::SingleAccesor()
 }
 
 
-void Parser::Lista_Expresiones()
+list<ExpresionNode *> *Parser::Lista_Expresiones()
 {
-    Expresion();
-    Lista_ExpresionesP();
+    ExpresionNode *nodeExpresion = Expresion();
+    list<ExpresionNode*> *listExpresion = Lista_ExpresionesP();
+
+    listExpresion->insert(listExpresion->begin(), nodeExpresion);
+    return listExpresion;
 }
 
 
-void Parser::Lista_ExpresionesP()
+list<ExpresionNode*> *Parser::Lista_ExpresionesP()
 {
     if (currentToken->Type == Comma)
     {
         currentToken = nextToken();
-        Expresion();
-        Lista_ExpresionesP();
+        ExpresionNode *nodeExpresion = Expresion();
+        list<ExpresionNode*> *listExpresion = Lista_ExpresionesP();
+
+        listExpresion->insert(listExpresion->begin(), nodeExpresion);
+
+        return listExpresion;
     }
-    else { /* EPSILON */ }
+    else
+    {
+        return new list<ExpresionNode*>();
+        //EPSILON
+    }
 }
 
 

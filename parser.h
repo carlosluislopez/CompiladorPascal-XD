@@ -4,6 +4,13 @@
 #include "ParserException.h"
 #include "lexer.h"
 #include "utileria.h"
+#include <list>
+#include "StatementNode.h"
+#include "BaseType.h"
+#include "ExpresionValue.h"
+#include "SyntaxTree.h"
+
+
 
 using namespace std;
 
@@ -63,18 +70,18 @@ private:
     void CaseP();
 
 
-    void ExpresionBooleana();
-    void ExpresionBooleanaP();
-    void Expresion();
-    void ExpresionP();
-    void Factor();
-    void FactorP();
-    void Termino();
-    void ID();
-    void Lista_Accesor();
-    void SingleAccesor();
-    void Lista_Expresiones();
-    void Lista_ExpresionesP();
+    ExpresionNode *ExpresionBooleana();
+    ExpresionNode *ExpresionBooleanaP(ExpresionNode *paramNode);
+    ExpresionNode *Expresion();
+    ExpresionNode * ExpresionP(ExpresionNode *paramNode);
+    ExpresionNode *Factor();
+    ExpresionNode * FactorP(ExpresionNode *paramNode);
+    ExpresionNode * Termino();
+    IdNode * ID();
+    Accesor *Lista_Accesor();
+    Accesor *SingleAccesor();
+    list<ExpresionNode*> * Lista_Expresiones();
+    list<ExpresionNode*> *Lista_ExpresionesP();
 
 
 };

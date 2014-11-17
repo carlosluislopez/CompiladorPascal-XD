@@ -25,7 +25,29 @@ SOURCES += main.cpp \
     stringtype.cpp \
     fieldaccesor.cpp \
     arrayaccesor.cpp \
-    idnode.cpp
+    idnode.cpp \
+    intnode.cpp \
+    floatnode.cpp \
+    boolnode.cpp \
+    stringnode.cpp \
+    binarynode.cpp \
+    hexadecimalnode.cpp \
+    charnode.cpp \
+    multiplyoperatornode.cpp \
+    divisionoperatornode.cpp \
+    sumoperatornode.cpp \
+    substractoperatornode.cpp \
+    equalsoperatornode.cpp \
+    greaterequalsthanoperatornode.cpp \
+    greaterthanoperatornode.cpp \
+    lessequalsthanoperatornode.cpp \
+    lessthanoperatornode.cpp \
+    notequalsoperatornode.cpp \
+    unaryoperator.cpp \
+    notoperatornode.cpp \
+    divisionintegeroperationnode.cpp \
+    modoperationnode.cpp \
+    expoperationnode.cpp
 
 HEADERS += \
     token.h \
@@ -44,4 +66,29 @@ HEADERS += \
     Accesor.h \
     fieldaccesor.h \
     arrayaccesor.h \
-    idnode.h
+    idnode.h \
+    intnode.h \
+    floatnode.h \
+    boolnode.h \
+    stringnode.h \
+    binarynode.h \
+    hexadecimalnode.h \
+    charnode.h \
+    BinaryOperatorNode.h \
+    multiplyoperatornode.h \
+    divisionoperatornode.h \
+    sumoperatornode.h \
+    substractoperatornode.h \
+    equalsoperatornode.h \
+    greaterequalsthanoperatornode.h \
+    greaterthanoperatornode.h \
+    lessequalsthanoperatornode.h \
+    lessthanoperatornode.h \
+    notequalsoperatornode.h \
+    unaryoperator.h \
+    notoperatornode.h \
+    ExpresionTree.h \
+    SyntaxTree.h \
+    divisionintegeroperationnode.h \
+    modoperationnode.h \
+    expoperationnode.h
