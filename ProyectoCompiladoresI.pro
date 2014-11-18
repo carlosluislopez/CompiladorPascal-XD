@@ -49,7 +49,12 @@ SOURCES += main.cpp \
     modoperationnode.cpp \
     expoperationnode.cpp \
     assignationnode.cpp \
-    fornode.cpp
+    fornode.cpp \
+    ifnode.cpp \
+    whilenode.cpp \
+    dowhilenode.cpp \
+    casenode.cpp \
+    casepnode.cpp
 
 HEADERS += \
     token.h \
@@ -98,4 +103,9 @@ HEADERS += \
     Values.h \
     Types.h \
     assignationnode.h \
-    fornode.h
+    fornode.h \
+    ifnode.h \
+    whilenode.h \
+    dowhilenode.h \
+    casenode.h \
+    casepnode.h

@@ -17,14 +17,14 @@ class Parser
 {
 public:
     Parser(Lexer *lexer);
-    void Parse();
+    list<StatementNode *> * Parse();
 private:
     Lexer *_lexer;
     Token *currentToken;
     Utileria util;
     Token *nextToken();
     bool validHTML;
-    void Programa();
+    list<StatementNode *> *Programa();
 
     void Lista_DeclaracionTipos();
     void Lista_DeclaracionTiposP();
@@ -58,15 +58,15 @@ private:
     StatementNode *Sentencia();
 
     StatementNode *Assign();
-    void If();
-    void Case();
+    StatementNode *If();
+    StatementNode *Case();
     StatementNode *For();
-    void While();
-    void DoWhile();
+    StatementNode *While();
+    StatementNode * DoWhile();
     void Procedimientos();
     StatementNode * Print();
 
-    void CaseP();
+    list<CasePNode *> *CaseP();
 
 
     ExpresionNode *ExpresionBooleana();

@@ -23,7 +23,7 @@ string FloatNode::ToXML(int identation){
     xml += util.getMeIdentation(identation);
     xml += "<FloatNode>\n";
     xml += util.getMeIdentation(identation + 1);
-    xml += util.toStringFloat(Value) + "\n";
+    xml += Value + "\n";
     xml += util.getMeIdentation(identation);
     xml += "</FloatNode>\n";
 

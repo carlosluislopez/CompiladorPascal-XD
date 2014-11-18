@@ -23,7 +23,7 @@ string HexadecimalNode::ToXML(int identation){
     xml += util.getMeIdentation(identation);
     xml += "<HexadecimalNode>\n";
     xml += util.getMeIdentation(identation + 1);
-    xml += util.toString(Value) + "\n";
+    xml += Value + "\n";
     xml += util.getMeIdentation(identation);
     xml += "</HexadecimalNode>\n";
 

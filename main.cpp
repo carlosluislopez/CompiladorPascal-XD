@@ -40,8 +40,18 @@ int main(int argc, char *argv[])
 
     try
     {
-        parser->Parse();
+        list<StatementNode*> *listaStatement = parser->Parse();
         cout << "Sintaxis Correcta" << '\n';
+
+        string xml = "";
+        for(std::list<StatementNode*>::iterator it = listaStatement->begin(); it != listaStatement->end(); it++)
+        {
+            StatementNode *sentence = *it;
+            xml += sentence->ToXML(0);
+        }
+
+        cout << xml << '\n';
+
     }catch(LexicalException &lexEx)
     {
         cout << lexEx.what() << '\n';

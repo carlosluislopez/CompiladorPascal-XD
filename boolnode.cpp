@@ -23,7 +23,7 @@ string BoolNode::ToXML(int identation){
     xml += util.getMeIdentation(identation);
     xml += "<BoolNode>\n";
     xml += util.getMeIdentation(identation + 1);
-    xml += util.toStringBool(Value) + "\n";
+    xml += Value + "\n";
     xml += util.getMeIdentation(identation);
     xml += "</BoolNode>\n";
 
