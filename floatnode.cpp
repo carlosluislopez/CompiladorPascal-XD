@@ -20,12 +20,9 @@ ExpresionValue * FloatNode::Interpret() const{
 string FloatNode::ToXML(int identation){
     string xml = "";
 
-    xml += util.getMeIdentation(identation);
-    xml += "<FloatNode>\n";
-    xml += util.getMeIdentation(identation + 1);
-    xml += Value + "\n";
-    xml += util.getMeIdentation(identation);
-    xml += "</FloatNode>\n";
+    xml += util.getMeIdentation(identation) + "<FloatNode>\n";
+    xml += util.getMeIdentation(identation + 1) + Value + "\n";
+    xml += util.getMeIdentation(identation) + "</FloatNode>\n";
 
     return xml;
 }

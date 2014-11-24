@@ -2,10 +2,14 @@
 
 CasePNode::CasePNode()
 {
+    Condition = 0;
+    Code = 0;
 }
 
 CasePNode::~CasePNode()
 {
+    delete Condition;
+    delete Code;
 }
 
 

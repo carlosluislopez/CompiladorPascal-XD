@@ -2,6 +2,7 @@
 
 ArrayAccesor::ArrayAccesor()
 {
+    Indexes = 0;
 }
 
 ArrayAccesor::~ArrayAccesor()
@@ -17,16 +18,16 @@ BaseType *ArrayAccesor::ValidateSemantics(BaseType *sourceType) const
 string ArrayAccesor::ToXML(int identation)
 {
     string xml = "";
-    xml += util.getMeIdentation(identation);
-    xml += "<ArrayAccesor>\n";
-    xml += util.getMeIdentation(identation);
+    xml += util.getMeIdentation(identation) + "<ArrayAccesor>\n";
 
-//    for (std::list<ExpresionNode*>::iterator it = Indexes->begin(); it != Indexes->end(); it++)
-//    {
-//        xml += ((ExpresionNode*)it)->ToXML(identation + 1);
-//    }
+    xml += util.getMeIdentation(identation + 1) + "<Indexes>\n";
+    for(std::list<ExpresionNode*>::iterator it = Indexes->begin(); it != Indexes->end(); it++)
+    {
+        ExpresionNode *expresion = *it;
+        xml += expresion->ToXML(identation + 2);
+    }
+    xml += util.getMeIdentation(identation + 1) + "</Indexes>\n";
 
-    xml += util.getMeIdentation(identation);
-    xml += "</ArrayAccesor>\n";
+    xml += util.getMeIdentation(identation) + "</ArrayAccesor>\n";
     return xml;
 }

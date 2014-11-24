@@ -1,22 +1,20 @@
 #include "printnode.h"
 
-PrintNode::PrintNode(){
-
+PrintNode::PrintNode()
+{
+    Value = 0;
 }
 
 PrintNode::~PrintNode(){
-
+    delete Value;
 }
 
 void PrintNode::ValidateSemantics() const
 {
-    Value->ValidateSemantics();
 }
 
 void PrintNode::Interpret() const
 {
-    //ExpresionValue *value = Value->Interpret();
-    //cout<<value<<endl;
 }
 
 

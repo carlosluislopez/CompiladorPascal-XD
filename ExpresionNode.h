@@ -5,6 +5,23 @@
 #include "ExpresionValue.h"
 #include "utileria.h"
 
+enum ExpresionNodeType{
+    StringNodeType
+    ,IntNodeType
+    ,FloatNodeType
+    ,CharNodeType
+    ,BoolNodeType
+    ,BinaryNodeType
+    ,HexadecimalNodeType
+    ,IdNodeType
+    ,BooleanExpresionNodeType
+    ,OperatorNodeType
+    ,AccesorNodeType
+    ,ArrayAccesorNodeType
+    ,FieldAccesorNodeType
+    ,ParamAccesorNodeType
+};
+
 class ExpresionNode
 {
 public:
@@ -12,6 +29,7 @@ public:
     virtual ExpresionValue *Interpret() const = 0;
     virtual string ToXML(int identation) = 0;
     Utileria util;
+    ExpresionNodeType TypeNode;
 };
 
 #endif // EXPRESIONNODE_H

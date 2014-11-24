@@ -2,9 +2,10 @@
 
 Parser::Parser(Lexer *lexer)
 {
+    listStatement = new list<StatementNode*>();
     this->_lexer = lexer;
     validHTML = false;
-    this->currentToken = nextToken();
+    this->currentToken = nextToken(listStatement, listStatement->end());
 }
 
 list<StatementNode *> *Parser::Parse()
@@ -21,30 +22,38 @@ list<StatementNode *> *Parser::Parse()
 //            break;
 //        }
 //    }
-    list<StatementNode *> * listStatement = Programa();
+
+    //list<StatementNode *> * listStatement = Programa();
+    Programa();
     if(currentToken->Type != EndOfFile)
         throw ParserException("Se esperaba fin de codigo; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
     return listStatement;
 }
 
-Token * Parser::nextToken()
+Token * Parser::nextToken(list<StatementNode *> *listStatementNode, list<StatementNode*>::iterator iterador)
 {
     Token * tokenTemp = _lexer->NextToken();
     while(tokenTemp->Type == HTML && !validHTML)
     {
+        StringNode * stringNode = new StringNode();
+        PrintNode * statementNode = new PrintNode();
+
+        stringNode->Value = tokenTemp->Lexeme;
+        statementNode->Value = stringNode;
+        listStatementNode->insert(iterador, statementNode);
+
         tokenTemp = _lexer->NextToken();
     }
     return tokenTemp;
 }
 
-list<StatementNode *> * Parser::Programa()
+void Parser::Programa()
 {
     Lista_DeclaracionTipos();
     Lista_Declaraciones();
     Lista_ProcedimientosFunciones();
-    list<StatementNode *> * listStatement = Lista_Sentencias();
-    return listStatement;
+    Lista_Sentencias();
 }
 
 void Parser::Lista_ProcedimientosFunciones()
@@ -86,14 +95,14 @@ void Parser::DeclaracionTipos()
     if(currentToken->Type == Rw_Type || currentToken->Type == Id)
     {
         if(currentToken->Type == Rw_Type)
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != Op_Equals)
             throw ParserException("Se esperaba un '='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type == Rw_Array)
             Array();
@@ -106,7 +115,7 @@ void Parser::DeclaracionTipos()
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba una ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
     }else{ /* EPSILON */ }
 }
@@ -115,32 +124,32 @@ void Parser::Array()
 {
     if(currentToken->Type == Rw_Array)
     {
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != LeftBrackets && currentToken->Type != Rw_Of)
             throw ParserException("Se esperaba un '[' o 'Of'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
         if(currentToken->Type == Rw_Of)
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != LeftBrackets)
             throw ParserException("Se esperaba un '['; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type == Int)
             Range();
         else if(currentToken->Type == Id)
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
         else
             Tipo();
 
         if(currentToken->Type != RightBrackets)
             throw ParserException("Se esperaba un ']'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type == Rw_Of)
         {
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
             Tipo();
         }
     }else{ /* EPSILON */ }
@@ -152,24 +161,24 @@ void Parser::Enum()
 {
     if(currentToken->Type == LeftParenthesis)
     {
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba una Id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type == Comma)
             EnumP();
         if(currentToken->Type != RightParenthesis)
             throw ParserException("Se esperaba una ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
     }else{ /* EPSILON */ }
 }
 
 void Parser::EnumP()
 {
-    currentToken = nextToken();
+    currentToken = nextToken(this->listStatement, this->listStatement->end());
     if(currentToken->Type != Id)
         throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
+    currentToken = nextToken(this->listStatement, this->listStatement->end());
     if(currentToken->Type == Comma)
         EnumP();
     else if (currentToken->Type == RightParenthesis)
@@ -182,13 +191,13 @@ void Parser::Range()
 {
     if(this->currentToken->Type == Int)
     {
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(this->currentToken->Type != Op_Range)
             throw ParserException("Se esperaba un '..'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(this->currentToken->Type != Int)
             throw ParserException("Se esperaba un entero; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
     }else{ /* EPSILON */ }
 }
 
@@ -215,29 +224,29 @@ void Parser::Declaracion()
     if(currentToken->Type == Rw_Var || currentToken->Type == Id)
     {
         if(currentToken->Type == Rw_Var)
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type == Comma)
             DeclaracionP();
         if (currentToken->Type != Colon)
             throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Tipo();
         if (currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
     }else{ /* EPSILON */ }
 }
 
 void Parser::DeclaracionP()
 {
-    currentToken = nextToken();
+    currentToken = nextToken(this->listStatement, this->listStatement->end());
     if(currentToken->Type != Id)
         throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
+    currentToken = nextToken(this->listStatement, this->listStatement->end());
     if(currentToken->Type == Comma)
         DeclaracionP();
     else if (currentToken->Type == Colon)
@@ -258,7 +267,7 @@ void Parser::Tipo()
       )
     {
         // Devolver Tipo
-        this->currentToken = nextToken();
+        this->currentToken = nextToken(this->listStatement, this->listStatement->end());
     }else
     {
         throw ParserException("Se esperaba un tipo de dato valido; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -278,33 +287,33 @@ void Parser::Procedimiento()
 {
     if(this->currentToken->Type == Rw_Procedure)
     {
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != LeftParenthesis)
             throw ParserException("Se esperaba un '('; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Parametros();
         if(currentToken->Type != RightParenthesis)
             throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Lista_DeclaracionesP();
 
 
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -318,23 +327,23 @@ void Parser::Parametros()
     if(currentToken->Type == Rw_Var || currentToken->Type == Id)
     {
         if(currentToken->Type == Rw_Var)
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un Id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type == Comma)
             DeclaracionP();
 
         if (currentToken->Type != Colon)
             throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Tipo();
 
         if(currentToken->Type == Comma)
         {
-            currentToken = nextToken();
+            currentToken = nextToken(this->listStatement, this->listStatement->end());
             Parametros();
         }
     }else{ /* EPSILON */ }
@@ -353,67 +362,48 @@ void Parser::Funcion()
 {
     if(this->currentToken->Type == Rw_Function)
     {
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != LeftParenthesis)
             throw ParserException("Se esperaba un '('; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Parametros();
         if(currentToken->Type != RightParenthesis)
             throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         if(currentToken->Type != Colon)
             throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Tipo();
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Lista_DeclaracionesP();
 
 
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
         Lista_SentenciasP();
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
-        currentToken = nextToken();
+        currentToken = nextToken(this->listStatement, this->listStatement->end());
     }else{ /* EPSILON */ }
 }
 
-list<StatementNode *> * Parser::Lista_Sentencias()
-{
-    if(this->currentToken->Type != Rw_Begin)
-        throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
-
-    list<StatementNode*> *listStatement = Lista_SentenciasP();
-
-    if(this->currentToken->Type != Rw_End)
-        throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
-
-    if(this->currentToken->Type != Dot)
-        throw ParserException("Se esperaba un '.'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
-
-    return listStatement;
-}
-
-list<StatementNode *> * Parser::Lista_SentenciasP()
+void Parser::Lista_Sentencias()
 {
     if(this->currentToken->Type == Id
        || this->currentToken->Type == Rw_For
@@ -425,12 +415,29 @@ list<StatementNode *> * Parser::Lista_SentenciasP()
        || this->currentToken->Type == Rw_Case
       )
     {
+        list<StatementNode*>::iterator iterador = this->listStatement->end();
+        StatementNode *statementNode = Sentencia(this->listStatement, this->listStatement->end());
+        listStatement->insert(iterador, statementNode);
+        Lista_Sentencias();
+    }else{ /* EPSILON */ }
+}
 
-        StatementNode *statementNode = Sentencia();
-        list<StatementNode*> *listStatement = Lista_SentenciasP();
-        listStatement->insert(listStatement->begin(), statementNode);
-
-        return listStatement;
+void Parser::Lista_SentenciasP(list<StatementNode *> * listStatementNode)
+{
+    if(this->currentToken->Type == Id
+       || this->currentToken->Type == Rw_For
+       || this->currentToken->Type == Rw_While
+       || this->currentToken->Type == Rw_Do
+       || this->currentToken->Type == Rw_Print
+       || this->currentToken->Type == Rw_If
+       || this->currentToken->Type == Rw_Else
+       || this->currentToken->Type == Rw_Case
+      )
+    {
+        list<StatementNode*>::iterator iterador = listStatementNode->end();
+        StatementNode *statementNode = Sentencia(listStatementNode, listStatementNode->end());
+        Lista_SentenciasP(listStatementNode);
+        listStatementNode->insert(iterador, statementNode);
     }else
     {
         return new list<StatementNode*>();
@@ -438,28 +445,28 @@ list<StatementNode *> * Parser::Lista_SentenciasP()
     }
 }
 
-StatementNode * Parser::Sentencia()
+StatementNode * Parser::Sentencia(list<StatementNode*> * listStatement, list<StatementNode*>::iterator iterador)
 {
     if(currentToken->Type == Rw_Print){
-        return Print();
+        return Print(listStatement, iterador);
     }else if(currentToken->Type == Id){
-        return Assign();
+        return Assign(listStatement, iterador);
     }else if(currentToken->Type == Rw_If){
-        return If();
+        return If(listStatement, iterador);
     }else if(currentToken->Type == Rw_Case){
-        return Case();
+        return Case(listStatement, iterador);
     }else if(currentToken->Type == Rw_For){
-        return For();
+        return For(listStatement, iterador);
     }else if(currentToken->Type == Rw_Do){
-        return DoWhile();
+        return DoWhile(listStatement, iterador);
     }else if(currentToken->Type == Rw_While){
-        return While();
+        return While(listStatement, iterador);
     }else{
         throw ParserException("Se esperaba una sentencia valida; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     }
 }
 
-StatementNode * Parser::Assign(){
+StatementNode * Parser::Assign(list<StatementNode*> * listStatement, list<StatementNode*>::iterator iterador){
     if(currentToken->Type == Id){
         IdNode * idNode = ID();
         if(currentToken->Type != Op_Assign)
@@ -830,6 +837,7 @@ StatementNode *Parser::Print()
 ExpresionNode * Parser::ExpresionBooleana()
 {
     ExpresionNode *expresionNode = Expresion();
+    expresionNode->TypeNode = BooleanExpresionNodeType;
     return ExpresionBooleanaP(expresionNode);
 }
 
@@ -844,6 +852,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         EqualsOperatorNode *operatorNode = new EqualsOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
     }else if(currentToken->Type == Op_LessThan)
@@ -854,6 +863,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         LessThanOperatorNode *operatorNode = new LessThanOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
     }
@@ -865,6 +875,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         LessEqualsThanOperatorNode *operatorNode = new LessEqualsThanOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
     }
@@ -876,6 +887,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         GreaterThanOperatorNode *operatorNode = new GreaterThanOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
 
@@ -888,6 +900,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         GreaterEqualsThanOperatorNode *operatorNode = new GreaterEqualsThanOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
     }
@@ -899,6 +912,7 @@ ExpresionNode * Parser::ExpresionBooleanaP(ExpresionNode *paramNode)
         NotEqualsOperatorNode *operatorNode = new NotEqualsOperatorNode();
         operatorNode->LeftOperandNode = paramNode;
         operatorNode->RightOperandNode = expresionNode;
+        operatorNode->TypeNode = BooleanExpresionNodeType;
 
         return ExpresionBooleanaP(operatorNode);
     }else
@@ -1033,42 +1047,49 @@ ExpresionNode *Parser::Termino()
     {
         IntNode * intNode = new IntNode();
         intNode->Value = currentToken->Lexeme;
+        intNode->TypeNode = IntNodeType;
         currentToken = nextToken();
         return intNode;
     }else if(currentToken->Type == Float)
     {
         FloatNode * floatNode = new FloatNode();
         floatNode->Value = currentToken->Lexeme;
+        floatNode->TypeNode = FloatNodeType;
         currentToken = nextToken();
         return floatNode;
     }else if(currentToken->Type == Bool)
     {
         BoolNode * boolNode = new BoolNode();
         boolNode->Value = currentToken->Lexeme;
+        boolNode->TypeNode = BoolNodeType;
         currentToken = nextToken();
         return boolNode;
     }else if(currentToken->Type == String)
     {
         StringNode * stringNode = new StringNode();
         stringNode->Value = currentToken->Lexeme;
+        stringNode->TypeNode = StringNodeType;
         currentToken = nextToken();
         return stringNode;
     }else if(currentToken->Type == Binary)
     {
         BinaryNode * binaryNode = new BinaryNode();
         binaryNode->Value = currentToken->Lexeme;
+        binaryNode->TypeNode = BinaryNodeType;
         currentToken = nextToken();
         return binaryNode;
     }else if(currentToken->Type == Hexadecimal)
     {
         HexadecimalNode * hexadecimalNode = new HexadecimalNode();
         hexadecimalNode->Value = currentToken->Lexeme;
+        hexadecimalNode->TypeNode = HexadecimalNodeType;
         currentToken = nextToken();
         return hexadecimalNode;
     }else if(currentToken->Type == Char)
     {
         CharNode * charNode = new CharNode();
         charNode->Value = currentToken->Lexeme;
+        charNode->TypeNode = CharNodeType;
         currentToken = nextToken();
         return charNode;
     }else if(currentToken->Type == LeftParenthesis)
@@ -1103,6 +1124,7 @@ IdNode * Parser::ID()
     IdNode * id = new IdNode();
     id->Name = name;
     id->AccesorList = accesorList;
+    id->TypeNode = IdNodeType;
 
     return id;
 }

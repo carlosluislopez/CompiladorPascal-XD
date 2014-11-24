@@ -2,10 +2,14 @@
 
 SumOperatorNode::SumOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 SumOperatorNode::~SumOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * SumOperatorNode::ValidateSemantics() const{

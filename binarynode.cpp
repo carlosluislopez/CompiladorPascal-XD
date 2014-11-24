@@ -20,12 +20,9 @@ ExpresionValue * BinaryNode::Interpret() const{
 string BinaryNode::ToXML(int identation){
     string xml = "";
 
-    xml += util.getMeIdentation(identation);
-    xml += "<BoolNode>\n";
-    xml += util.getMeIdentation(identation + 1);
-    xml += Value + "\n";
-    xml += util.getMeIdentation(identation);
-    xml += "</BoolNode>\n";
+    xml += util.getMeIdentation(identation) + "<BoolNode>\n";
+    xml += util.getMeIdentation(identation + 1) + Value + "\n";
+    xml += util.getMeIdentation(identation) + "</BoolNode>\n";
 
     return xml;
 }

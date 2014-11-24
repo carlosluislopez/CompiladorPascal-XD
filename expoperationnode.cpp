@@ -2,10 +2,14 @@
 
 ExpOperationNode::ExpOperationNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 ExpOperationNode::~ExpOperationNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * ExpOperationNode::ValidateSemantics() const{

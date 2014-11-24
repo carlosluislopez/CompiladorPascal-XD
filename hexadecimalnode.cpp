@@ -20,12 +20,9 @@ ExpresionValue * HexadecimalNode::Interpret() const{
 string HexadecimalNode::ToXML(int identation){
     string xml = "";
 
-    xml += util.getMeIdentation(identation);
-    xml += "<HexadecimalNode>\n";
-    xml += util.getMeIdentation(identation + 1);
-    xml += Value + "\n";
-    xml += util.getMeIdentation(identation);
-    xml += "</HexadecimalNode>\n";
+    xml += util.getMeIdentation(identation) + "<HexadecimalNode>\n";
+    xml += util.getMeIdentation(identation + 1) + Value + "\n";
+    xml += util.getMeIdentation(identation) + "</HexadecimalNode>\n";
 
     return xml;
 }

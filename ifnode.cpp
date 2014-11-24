@@ -2,10 +2,16 @@
 
 IfNode::IfNode()
 {
+    Condition = 0;
+    Code = 0;
+    CodeElse = 0;
 }
 
 IfNode::~IfNode()
 {
+    delete Condition;
+    delete Code;
+    delete CodeElse;
 }
 
 void IfNode::ValidateSemantics() const

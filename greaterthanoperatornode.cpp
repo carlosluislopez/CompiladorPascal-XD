@@ -2,11 +2,15 @@
 
 GreaterThanOperatorNode::GreaterThanOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 
 GreaterThanOperatorNode::~GreaterThanOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * GreaterThanOperatorNode::ValidateSemantics() const{

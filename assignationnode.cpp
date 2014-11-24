@@ -3,10 +3,14 @@
 
 AssignationNode::AssignationNode()
 {
+    LeftValue = 0;
+    RightValue = 0;
 }
 
 AssignationNode::~AssignationNode()
 {
+    delete LeftValue;
+    delete RightValue;
 }
 
 void AssignationNode::ValidateSemantics() const

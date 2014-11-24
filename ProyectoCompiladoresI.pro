@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     whilenode.cpp \
     dowhilenode.cpp \
     casenode.cpp \
-    casepnode.cpp
+    casepnode.cpp \
+    paramaccesor.cpp
 
 HEADERS += \
     token.h \
@@ -108,4 +109,5 @@ HEADERS += \
     whilenode.h \
     dowhilenode.h \
     casenode.h \
-    casepnode.h
+    casepnode.h \
+    paramaccesor.h

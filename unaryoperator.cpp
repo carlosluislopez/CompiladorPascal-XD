@@ -2,10 +2,12 @@
 
 UnaryOperator::UnaryOperator()
 {
+    OperandNode = 0;
 }
 
 UnaryOperator::~UnaryOperator()
 {
+    delete OperandNode;
 }
 
 BaseType * UnaryOperator::ValidateSemantics() const{

@@ -2,10 +2,14 @@
 
 DivisionOperatorNode::DivisionOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 DivisionOperatorNode::~DivisionOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 

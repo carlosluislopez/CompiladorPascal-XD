@@ -2,10 +2,14 @@
 
 DoWhileNode::DoWhileNode()
 {
+    Code = 0;
+    Condition = 0;
 }
 
 DoWhileNode::~DoWhileNode()
 {
+    delete Code;
+    delete Condition;
 }
 
 void DoWhileNode::ValidateSemantics() const

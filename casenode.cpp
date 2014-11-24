@@ -2,10 +2,16 @@
 
 CaseNode::CaseNode()
 {
+    Condition = 0;
+    CaseList = 0;
+    CodeElse = 0;
 }
 
 CaseNode::~CaseNode()
 {
+    delete Condition;
+    delete CaseList;
+    delete CodeElse;
 }
 
 

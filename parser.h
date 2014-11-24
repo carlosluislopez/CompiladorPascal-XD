@@ -22,9 +22,10 @@ private:
     Lexer *_lexer;
     Token *currentToken;
     Utileria util;
-    Token *nextToken();
+    Token *nextToken(list<StatementNode *> *listStatementNode, list<StatementNode*>::iterator iterador);
+    list<StatementNode *> * listStatement;
     bool validHTML;
-    list<StatementNode *> *Programa();
+    void Programa();
 
     void Lista_DeclaracionTipos();
     void Lista_DeclaracionTiposP();
@@ -34,8 +35,8 @@ private:
     void Lista_ProcedimientosFunciones();
     void Lista_Procedimientos();
     void Lista_Funciones();
-    list<StatementNode *> *Lista_Sentencias();
-    list<StatementNode *> *Lista_SentenciasP();
+    void Lista_Sentencias();
+    void Lista_SentenciasP(list<StatementNode *> * listStatementNode);
 
     void Array();
     void Record();

@@ -2,10 +2,14 @@
 
 SubstractOperatorNode::SubstractOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 SubstractOperatorNode::~SubstractOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 

@@ -6,10 +6,14 @@ WhileNode::WhileNode()
 
 WhileNode::~WhileNode()
 {
+    Condition = 0;
+    Code = 0;
 }
 
 void WhileNode::ValidateSemantics() const
 {
+    delete Condition;
+    delete Code;
 }
 
 void WhileNode::Interpret() const

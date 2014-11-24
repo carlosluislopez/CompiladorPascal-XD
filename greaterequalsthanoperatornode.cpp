@@ -2,10 +2,14 @@
 
 GreaterEqualsThanOperatorNode::GreaterEqualsThanOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 GreaterEqualsThanOperatorNode::~GreaterEqualsThanOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * GreaterEqualsThanOperatorNode::ValidateSemantics() const{

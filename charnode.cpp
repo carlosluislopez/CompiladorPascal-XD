@@ -20,12 +20,9 @@ ExpresionValue * CharNode::Interpret() const{
 string CharNode::ToXML(int identation){
     string xml = "";
 
-    xml += util.getMeIdentation(identation);
-    xml += "<CharNode>\n";
-    xml += util.getMeIdentation(identation + 1);
-    xml += Value + "\n";
-    xml += util.getMeIdentation(identation);
-    xml += "</CharNode>\n";
+    xml += util.getMeIdentation(identation) + "<CharNode>\n";
+    xml += util.getMeIdentation(identation + 1) + Value + "\n";
+    xml += util.getMeIdentation(identation) + "</CharNode>\n";
 
     return xml;
 }

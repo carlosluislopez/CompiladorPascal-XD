@@ -571,7 +571,12 @@ Token * Lexer::NextHTMLToken(){
             type = tripleSymbolDictionary[toLower(xd)];
             stateHTML = false;
 
-            string lexemTemp = lexeme.substr(0, lexeme.length()-3);
+            string lexemTemp = "";
+            if(lexeme.length() > 3)
+            {
+                lexemTemp = lexeme.substr(0, lexeme.length()-3);
+            }
+
 
             token->Lexeme = lexemTemp;
             token->Type = HTML;

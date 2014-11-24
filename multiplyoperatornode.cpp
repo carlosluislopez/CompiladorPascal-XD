@@ -2,10 +2,14 @@
 
 MultiplyOperatorNode::MultiplyOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 MultiplyOperatorNode::~MultiplyOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * MultiplyOperatorNode::ValidateSemantics() const{

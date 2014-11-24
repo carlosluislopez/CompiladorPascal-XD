@@ -2,10 +2,14 @@
 
 LessEqualsThanOperatorNode::LessEqualsThanOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 LessEqualsThanOperatorNode::~LessEqualsThanOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 

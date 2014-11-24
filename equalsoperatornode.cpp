@@ -2,10 +2,14 @@
 
 EqualsOperatorNode::EqualsOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 EqualsOperatorNode::~EqualsOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 

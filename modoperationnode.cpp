@@ -2,10 +2,14 @@
 
 ModOperationNode::ModOperationNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 ModOperationNode::~ModOperationNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 

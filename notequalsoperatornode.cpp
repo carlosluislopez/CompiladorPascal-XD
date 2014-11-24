@@ -2,10 +2,14 @@
 
 NotEqualsOperatorNode::NotEqualsOperatorNode()
 {
+    LeftOperandNode = 0;
+    RightOperandNode = 0;
 }
 
 NotEqualsOperatorNode::~NotEqualsOperatorNode()
 {
+    delete LeftOperandNode;
+    delete RightOperandNode;
 }
 
 BaseType * NotEqualsOperatorNode::ValidateSemantics() const{
