@@ -3,6 +3,6 @@
 
 #include "BaseType.h"
 #include "stringtype.h"
-
+#include "inttype.h"
 
 #endif // TYPES_H

@@ -8,7 +8,7 @@
 #include "SyntaxTree.h"
 #include "Values.h"
 #include "Types.h"
-
+#include "typetable.h"
 
 
 using namespace std;
@@ -24,6 +24,7 @@ private:
     Utileria util;
     Token *nextToken();
     bool validHTML;
+    TypeTable *typeTable;
     list<StatementNode *> *Programa();
 
     void Lista_DeclaracionTipos();
@@ -37,19 +38,19 @@ private:
     list<StatementNode *> *Lista_Sentencias();
     list<StatementNode *> *Lista_SentenciasP();
 
-    void Array();
-    void Record();
-    void Enum();
-    void Range();
+    BaseType * Array();
+    BaseType *Record();
+    BaseType * Enum();
+    BaseType * Range();
 
-    void EnumP();
+    BaseType *EnumP();
 
     void Parametros();
 
     void DeclaracionTipos();
     void Declaracion();
     void DeclaracionP();
-    void Tipo();
+    BaseType * Tipo();
 
     void Procedimiento();
     void Funcion();

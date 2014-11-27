@@ -4,6 +4,8 @@ Parser::Parser(Lexer *lexer)
 {
     this->_lexer = lexer;
     validHTML = false;
+    typeTable = TypeTable::getInstance();
+
     this->currentToken = nextToken();
 }
 
@@ -90,19 +92,25 @@ void Parser::DeclaracionTipos()
 
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+        string id = currentToken->Lexeme;
         currentToken = nextToken();
         if(currentToken->Type != Op_Equals)
             throw ParserException("Se esperaba un '='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
 
+        BaseType *type;
         if(currentToken->Type == Rw_Array)
-            Array();
+            type = Array();
         else if(currentToken->Type == Rw_Record)
-            Record();
+            type = Record();
         else if(currentToken->Type == LeftParenthesis)
-            Enum();
+            type = Enum();
         else if(currentToken->Type == Int)
-            Range();
+            type = Range();
+        else
+            type = Tipo();
+
+        typeTable->setType(id, type);
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba una ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -111,7 +119,7 @@ void Parser::DeclaracionTipos()
     }else{ /* EPSILON */ }
 }
 
-void Parser::Array()
+BaseType * Parser::Array()
 {
     if(currentToken->Type == Rw_Array)
     {
@@ -144,11 +152,12 @@ void Parser::Array()
             Tipo();
         }
     }else{ /* EPSILON */ }
+    return 0;
 }
 
-void Parser::Record(){}
+BaseType * Parser::Record(){ return 0; }
 
-void Parser::Enum()
+BaseType *Parser::Enum()
 {
     if(currentToken->Type == LeftParenthesis)
     {
@@ -162,9 +171,10 @@ void Parser::Enum()
             throw ParserException("Se esperaba una ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
     }else{ /* EPSILON */ }
+    return 0;
 }
 
-void Parser::EnumP()
+BaseType * Parser::EnumP()
 {
     currentToken = nextToken();
     if(currentToken->Type != Id)
@@ -173,12 +183,13 @@ void Parser::EnumP()
     if(currentToken->Type == Comma)
         EnumP();
     else if (currentToken->Type == RightParenthesis)
-        return;
+        return 0;
     else
         throw ParserException("Se esperaba un ')'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    return 0;
 }
 
-void Parser::Range()
+BaseType * Parser::Range()
 {
     if(this->currentToken->Type == Int)
     {
@@ -190,6 +201,7 @@ void Parser::Range()
             throw ParserException("Se esperaba un entero; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
     }else{ /* EPSILON */ }
+    return 0;
 }
 
 void Parser::Lista_Declaraciones()
@@ -246,23 +258,61 @@ void Parser::DeclaracionP()
         throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 }
 
-void Parser::Tipo()
+BaseType * Parser::Tipo()
 {
-    if(this->currentToken->Type == Rw_Int
-       || this->currentToken->Type == Rw_Float
-       || this->currentToken->Type == Rw_String
-       || this->currentToken->Type == Rw_Char
-       || this->currentToken->Type == Rw_Bool
-       || this->currentToken->Type == Rw_Integer
-       || this->currentToken->Type == Rw_Real
-      )
+    if(currentToken->Type == Rw_Integer || currentToken->Type == Rw_Int)
     {
-        // Devolver Tipo
-        this->currentToken = nextToken();
-    }else
+        IntType * intType = new IntType();
+        currentToken = nextToken();
+        return intType;
+    }
+//    else if(currentToken->Type == Rw_Float || currentToken->Type == Rw_Real)
+//    {
+//        FloatNode * floatNode = new FloatNode();
+//        floatNode->Value = currentToken->Lexeme;
+//        currentToken = nextToken();
+//        return floatNode;
+//    }else if(currentToken->Type == Rw_Bool)
+//    {
+//        BoolNode * boolNode = new BoolNode();
+//        boolNode->Value = currentToken->Lexeme;
+//        currentToken = nextToken();
+//        return boolNode;
+//    }
+    else if(currentToken->Type == Rw_String)
+    {
+        StringType * stringType = new StringType();
+        currentToken = nextToken();
+        return stringType;
+    }
+//    else if(currentToken->Type == Rw_Char)
+//    {
+//        CharNode * charNode = new CharNode();
+//        charNode->Value = currentToken->Lexeme;
+//        currentToken = nextToken();
+//        return charNode;
+//    }
+    else
     {
         throw ParserException("Se esperaba un tipo de dato valido; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     }
+
+
+//    if(this->currentToken->Type == Rw_Int
+//       || this->currentToken->Type == Rw_Float
+//       || this->currentToken->Type == Rw_String
+//       || this->currentToken->Type == Rw_Char
+//       || this->currentToken->Type == Rw_Bool
+//       || this->currentToken->Type == Rw_Integer
+//       || this->currentToken->Type == Rw_Real
+//      )
+//    {
+//        // Devolver Tipo
+//        this->currentToken = nextToken();
+//    }else
+//    {
+//        throw ParserException("Se esperaba un tipo de dato valido; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+//    }
 }
 
 void Parser::Lista_Procedimientos()
@@ -396,19 +446,19 @@ void Parser::Funcion()
 
 list<StatementNode *> * Parser::Lista_Sentencias()
 {
-    if(this->currentToken->Type != Rw_Begin)
-        throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
+//    if(this->currentToken->Type != Rw_Begin)
+//        throw ParserException("Se esperaba un 'Begin'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+//    currentToken = nextToken();
 
     list<StatementNode*> *listStatement = Lista_SentenciasP();
 
-    if(this->currentToken->Type != Rw_End)
-        throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
+//    if(this->currentToken->Type != Rw_End)
+//        throw ParserException("Se esperaba un 'End'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+//    currentToken = nextToken();
 
-    if(this->currentToken->Type != Dot)
-        throw ParserException("Se esperaba un '.'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    currentToken = nextToken();
+//    if(this->currentToken->Type != Dot)
+//        throw ParserException("Se esperaba un '.'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+//    currentToken = nextToken();
 
     return listStatement;
 }

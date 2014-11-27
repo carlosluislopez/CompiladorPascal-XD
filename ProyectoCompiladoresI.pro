@@ -54,7 +54,9 @@ SOURCES += main.cpp \
     whilenode.cpp \
     dowhilenode.cpp \
     casenode.cpp \
-    casepnode.cpp
+    casepnode.cpp \
+    typetable.cpp \
+    inttype.cpp
 
 HEADERS += \
     token.h \
@@ -108,4 +110,8 @@ HEADERS += \
     whilenode.h \
     dowhilenode.h \
     casenode.h \
-    casepnode.h
+    casepnode.h \
+    SemanticException.h \
+    TypeDefined.h \
+    typetable.h \
+    inttype.h

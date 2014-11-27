@@ -3,6 +3,7 @@
 
 #include "string"
 #include "utileria.h"
+#include "SemanticException.h"
 
 using namespace std;
 

@@ -4,6 +4,7 @@
 #include "BaseType.h"
 #include "ExpresionValue.h"
 #include "utileria.h"
+#include "SemanticException.h"
 
 class ExpresionNode
 {

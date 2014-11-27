@@ -5,6 +5,7 @@
 #include <list>
 #include "BaseType.h"
 #include "utileria.h"
+#include "SemanticException.h"
 
 using namespace std;
 
