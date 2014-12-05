@@ -9,7 +9,7 @@ NotEqualsOperatorNode::~NotEqualsOperatorNode()
 }
 
 BaseType * NotEqualsOperatorNode::ValidateSemantics() const{
-    return 0;
+    return new BoolType();
 }
 
 ExpresionValue * NotEqualsOperatorNode::Interpret() const{

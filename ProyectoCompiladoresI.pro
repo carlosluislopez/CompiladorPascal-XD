@@ -56,7 +56,11 @@ SOURCES += main.cpp \
     casenode.cpp \
     casepnode.cpp \
     typetable.cpp \
-    inttype.cpp
+    inttype.cpp \
+    floattype.cpp \
+    booltype.cpp \
+    chartype.cpp \
+    symboltable.cpp
 
 HEADERS += \
     token.h \
@@ -114,4 +118,9 @@ HEADERS += \
     SemanticException.h \
     TypeDefined.h \
     typetable.h \
-    inttype.h
+    inttype.h \
+    floattype.h \
+    booltype.h \
+    chartype.h \
+    symboltable.h \
+    Variable.h

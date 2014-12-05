@@ -10,7 +10,7 @@ IntNode::~IntNode()
 
 
 BaseType * IntNode::ValidateSemantics() const{
-    return 0;
+    return new IntType();
 }
 
 ExpresionValue * IntNode::Interpret() const{

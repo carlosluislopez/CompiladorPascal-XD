@@ -9,7 +9,7 @@ StringNode::~StringNode()
 }
 
 BaseType * StringNode::ValidateSemantics() const{
-    return 0;
+    return new StringType();
 }
 
 ExpresionValue * StringNode::Interpret() const{

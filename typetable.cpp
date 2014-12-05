@@ -13,7 +13,10 @@ TypeTable::~TypeTable()
 
 TypeTable * TypeTable::getInstance(){
     if(Instance == 0)
+    {
         Instance = new TypeTable();
+        Instance->Types = new list<TypeDefined*>();
+    }
     return Instance;
 }
 
@@ -45,9 +48,6 @@ void TypeTable::setType(string name, BaseType *type){
     TypeDefined * newType = new TypeDefined();
     newType->Name = name;
     newType->Type = type;
-
-    if(Types == 0)
-        Types = new list<TypeDefined*>();
 
     Types->insert(Types->end(), newType);
 }

@@ -10,7 +10,7 @@ FloatNode::~FloatNode()
 
 
 BaseType * FloatNode::ValidateSemantics() const{
-    return 0;
+    return new FloatType();
 }
 
 ExpresionValue * FloatNode::Interpret() const{

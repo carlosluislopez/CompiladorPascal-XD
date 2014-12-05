@@ -6,6 +6,7 @@
 #include "lexer.h"
 #include "parser.h"
 
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -14,8 +15,8 @@ int main(int argc, char *argv[])
     
     string line;
 
-    //ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
-    ifstream myfile ("C:\\Users\\clopez\\Documents\\UNITEC\\Compiladores\\example.txt");
+    ifstream myfile ("C:\\Users\\carlo_000\\Desktop\\example.txt");
+    //ifstream myfile ("C:\\Users\\clopez\\Documents\\UNITEC\\Compiladores\\example.txt");
     string contenido = "";
 
     if (myfile.is_open())
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
         {
             StatementNode *sentence = *it;
             xml += sentence->ToXML(0);
+            //sentence->ValidateSemantics();
         }
 
         cout << xml << '\n';
@@ -59,6 +61,10 @@ int main(int argc, char *argv[])
     catch(ParserException &parEx)
     {
         cout << parEx.what() << '\n';
+    }
+    catch(SemanticException &semEx)
+    {
+        cout << semEx.what() << '\n';
     }
 
 //    while(current->Type != EndOfFile)

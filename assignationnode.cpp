@@ -11,6 +11,8 @@ AssignationNode::~AssignationNode()
 
 void AssignationNode::ValidateSemantics() const
 {
+    LeftValue->ValidateSemantics();
+    RightValue->ValidateSemantics();
 }
 
 void AssignationNode::Interpret() const

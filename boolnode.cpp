@@ -10,7 +10,7 @@ BoolNode::~BoolNode()
 
 
 BaseType * BoolNode::ValidateSemantics() const{
-    return 0;
+    return new BoolType();
 }
 
 ExpresionValue * BoolNode::Interpret() const{

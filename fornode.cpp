@@ -10,6 +10,14 @@ ForNode::~ForNode()
 
 void ForNode::ValidateSemantics() const
 {
+    Id->ValidateSemantics();
+    InitialValue->ValidateSemantics();
+    FinalValue->ValidateSemantics();
+    for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->ValidateSemantics();
+    }
 }
 
 void ForNode::Interpret() const

@@ -2,6 +2,7 @@
 
 StringType::StringType()
 {
+    this->type = BaseTypeString;
 }
 
 StringType::~StringType()

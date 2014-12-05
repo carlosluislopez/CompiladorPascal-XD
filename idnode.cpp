@@ -2,6 +2,7 @@
 
 IdNode::IdNode()
 {
+    symbolTable = SymbolTable::getInstance();
 }
 
 
@@ -11,7 +12,8 @@ IdNode::~IdNode()
 
 BaseType * IdNode::ValidateSemantics() const
 {
-    return 0;
+
+    return symbolTable->getVariableType(Name);
 }
 
 ExpresionValue * IdNode::Interpret() const

@@ -4,25 +4,13 @@ Parser::Parser(Lexer *lexer)
 {
     this->_lexer = lexer;
     validHTML = false;
-    typeTable = TypeTable::getInstance();
+    symbolTable = SymbolTable::getInstance();
 
     this->currentToken = nextToken();
 }
 
 list<StatementNode *> *Parser::Parse()
 {
-//    while(currentToken->Type != EndOfFile)
-//    {
-//        cout <<"Line: " << currentToken->Line << " \tCol: " << currentToken->Column << "\tType: " << currentToken->Type << " \t" << "\tLexeme: " << currentToken->Lexeme << endl;
-//        try
-//        {
-//            currentToken = this->_lexer->NextToken();
-//        }catch(LexicalException &lexEx)
-//        {
-//            cout << lexEx.what() << '\n';
-//            break;
-//        }
-//    }
     list<StatementNode *> * listStatement = Programa();
     if(currentToken->Type != EndOfFile)
         throw ParserException("Se esperaba fin de codigo; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -98,7 +86,7 @@ void Parser::DeclaracionTipos()
             throw ParserException("Se esperaba un '='; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
 
-        BaseType *type;
+        BaseType *type = 0;
         if(currentToken->Type == Rw_Array)
             type = Array();
         else if(currentToken->Type == Rw_Record)
@@ -110,7 +98,7 @@ void Parser::DeclaracionTipos()
         else
             type = Tipo();
 
-        typeTable->setType(id, type);
+        symbolTable->addType(id, type);
 
         if(currentToken->Type != SemiColon)
             throw ParserException("Se esperaba una ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
@@ -231,88 +219,81 @@ void Parser::Declaracion()
 
         if(currentToken->Type != Id)
             throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+
+        string id = currentToken->Lexeme;
+        int line = currentToken->Line;
+        int col = currentToken->Column;
+
+        list<string> *listId = 0;
         currentToken = nextToken();
         if(currentToken->Type == Comma)
-            DeclaracionP();
+            listId = DeclaracionP();
         if (currentToken->Type != Colon)
             throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        Tipo();
+        BaseType *type = Tipo();
         if (currentToken->Type != SemiColon)
             throw ParserException("Se esperaba un ';'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
+
+        if(listId == 0)
+            listId = new list<string>();
+
+        listId->insert(listId->begin(), id);
+
+        for(std::list<string>::iterator it = listId->begin(); it != listId->end(); it++)
+        {
+            string name = *it;
+            if(symbolTable->IsExist(name))
+                throw SemanticException("Ya esta definido el Id: " + name + "; Line: " + util.toString(line) + ", Column: " + util.toString(col));
+
+            symbolTable->addGlobalVariable(id, type);
+        }
+
+        //if(symbolTable->IsExist(id))
+        //    throw SemanticException("Ya esta definido el Id: " + id + "; Line: " + util.toString(line) + ", Column: " + util.toString(col));
+
+        //symbolTable->addGlobalVariable(id, type);
+
     }else{ /* EPSILON */ }
 }
 
-void Parser::DeclaracionP()
+list<string> * Parser::DeclaracionP()
 {
+    list<string> *listId = 0;
     currentToken = nextToken();
     if(currentToken->Type != Id)
         throw ParserException("Se esperaba un id; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    string id = currentToken->Lexeme;
     currentToken = nextToken();
     if(currentToken->Type == Comma)
-        DeclaracionP();
+        listId = DeclaracionP();
     else if (currentToken->Type == Colon)
-        return;
+    {
+        if(listId == 0)
+        {
+            listId = new list<string>();
+        }
+        listId->insert(listId->begin(), id);
+        return listId;
+    }
     else
+    {
         throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
+    }
+    return new list<string>();
 }
 
 BaseType * Parser::Tipo()
 {
-    if(currentToken->Type == Rw_Integer || currentToken->Type == Rw_Int)
+    if(symbolTable->IsExistType(currentToken->Lexeme))
     {
-        IntType * intType = new IntType();
+        string tempLexeme = currentToken->Lexeme;
         currentToken = nextToken();
-        return intType;
+        return symbolTable->getBaseType(tempLexeme);
+    }else{
+        throw SemanticException("No existe el tipo de dato: " + currentToken->Lexeme + "; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     }
-//    else if(currentToken->Type == Rw_Float || currentToken->Type == Rw_Real)
-//    {
-//        FloatNode * floatNode = new FloatNode();
-//        floatNode->Value = currentToken->Lexeme;
-//        currentToken = nextToken();
-//        return floatNode;
-//    }else if(currentToken->Type == Rw_Bool)
-//    {
-//        BoolNode * boolNode = new BoolNode();
-//        boolNode->Value = currentToken->Lexeme;
-//        currentToken = nextToken();
-//        return boolNode;
-//    }
-    else if(currentToken->Type == Rw_String)
-    {
-        StringType * stringType = new StringType();
-        currentToken = nextToken();
-        return stringType;
-    }
-//    else if(currentToken->Type == Rw_Char)
-//    {
-//        CharNode * charNode = new CharNode();
-//        charNode->Value = currentToken->Lexeme;
-//        currentToken = nextToken();
-//        return charNode;
-//    }
-    else
-    {
-        throw ParserException("Se esperaba un tipo de dato valido; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-    }
-
-
-//    if(this->currentToken->Type == Rw_Int
-//       || this->currentToken->Type == Rw_Float
-//       || this->currentToken->Type == Rw_String
-//       || this->currentToken->Type == Rw_Char
-//       || this->currentToken->Type == Rw_Bool
-//       || this->currentToken->Type == Rw_Integer
-//       || this->currentToken->Type == Rw_Real
-//      )
-//    {
-//        // Devolver Tipo
-//        this->currentToken = nextToken();
-//    }else
-//    {
-//        throw ParserException("Se esperaba un tipo de dato valido; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
-//    }
 }
 
 void Parser::Lista_Procedimientos()

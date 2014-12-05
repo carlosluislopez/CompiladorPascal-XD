@@ -10,7 +10,7 @@ CharNode::~CharNode()
 
 
 BaseType * CharNode::ValidateSemantics() const{
-    return 0;
+    return new CharType();
 }
 
 ExpresionValue * CharNode::Interpret() const{

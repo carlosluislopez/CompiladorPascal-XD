@@ -4,6 +4,7 @@
 #include "ExpresionNode.h"
 #include "BaseType.h"
 #include "ExpresionValue.h"
+#include "floattype.h"
 
 
 class FloatNode : public ExpresionNode

@@ -2,6 +2,7 @@
 #define UNARYOPERATOR_H
 
 #include "ExpresionNode.h"
+#include "booltype.h"
 
 class UnaryOperator : public ExpresionNode
 {

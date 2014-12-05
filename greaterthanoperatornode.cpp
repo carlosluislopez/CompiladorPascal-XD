@@ -10,7 +10,7 @@ GreaterThanOperatorNode::~GreaterThanOperatorNode()
 }
 
 BaseType * GreaterThanOperatorNode::ValidateSemantics() const{
-    return 0;
+    return new BoolType();
 }
 
 ExpresionValue * GreaterThanOperatorNode::Interpret() const{

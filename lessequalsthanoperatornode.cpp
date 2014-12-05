@@ -10,7 +10,7 @@ LessEqualsThanOperatorNode::~LessEqualsThanOperatorNode()
 
 
 BaseType * LessEqualsThanOperatorNode::ValidateSemantics() const{
-    return 0;
+    return new BoolType();
 }
 
 ExpresionValue * LessEqualsThanOperatorNode::Interpret() const{

@@ -10,6 +10,12 @@ DoWhileNode::~DoWhileNode()
 
 void DoWhileNode::ValidateSemantics() const
 {
+    for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->ValidateSemantics();
+    }
+    Condition->ValidateSemantics();
 }
 
 void DoWhileNode::Interpret() const

@@ -3,6 +3,7 @@
 
 
 #include "ExpresionNode.h"
+#include "Types.h"
 
 
 using namespace std;

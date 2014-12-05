@@ -9,7 +9,25 @@ MultiplyOperatorNode::~MultiplyOperatorNode()
 }
 
 BaseType * MultiplyOperatorNode::ValidateSemantics() const{
-    return 0;
+    BaseType * leftType = LeftOperandNode->ValidateSemantics();
+    BaseType * rightType = RightOperandNode->ValidateSemantics();
+
+    if(leftType == 0 || rightType == 0)
+        throw SemanticException("Para el operador '*' sus operandos deben estar definidos");
+
+    if(!(leftType->type == BaseTypeInt || leftType->type == BaseTypeFloat))
+        throw SemanticException("No se puede multiplicar tipos distintos a numeros");
+
+    if(!(rightType->type == BaseTypeInt || rightType->type == BaseTypeFloat))
+        throw SemanticException("No se puede multiplicar tipos distintos a numeros");
+
+    if((leftType->type == rightType->type) && (leftType->type == BaseTypeInt || leftType->type == BaseTypeFloat))
+        return leftType;
+
+    if((leftType->type != rightType->type))
+        return new FloatType();
+
+    throw SemanticException("No se puede multiplicar tipos distintos a numeros");
 }
 
 ExpresionValue * MultiplyOperatorNode::Interpret() const{

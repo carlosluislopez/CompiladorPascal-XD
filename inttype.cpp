@@ -2,6 +2,7 @@
 
 IntType::IntType()
 {
+    this->type = BaseTypeInt;
 }
 
 IntType::~IntType()

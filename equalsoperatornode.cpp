@@ -10,7 +10,7 @@ EqualsOperatorNode::~EqualsOperatorNode()
 
 
 BaseType * EqualsOperatorNode::ValidateSemantics() const{
-    return 0;
+    return new BoolType();
 }
 
 ExpresionValue * EqualsOperatorNode::Interpret() const{

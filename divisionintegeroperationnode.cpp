@@ -9,7 +9,16 @@ DivisionIntegerOperationNode::~DivisionIntegerOperationNode()
 }
 
 BaseType * DivisionIntegerOperationNode::ValidateSemantics() const{
-    return 0;
+    BaseType * leftType = LeftOperandNode->ValidateSemantics();
+    BaseType * rightType = RightOperandNode->ValidateSemantics();
+
+    if(leftType == 0 || rightType == 0)
+        throw SemanticException("Para el operador 'div' sus operandos deben estar definidos");
+
+    if(!(leftType->type == BaseTypeInt && rightType->type == BaseTypeInt))
+        throw SemanticException("No se puede dividir tipos distintos a entero");
+
+    return new IntType();
 }
 
 ExpresionValue * DivisionIntegerOperationNode::Interpret() const{

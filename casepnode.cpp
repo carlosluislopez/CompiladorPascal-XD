@@ -11,6 +11,12 @@ CasePNode::~CasePNode()
 
 void CasePNode::ValidateSemantics() const
 {
+    Condition->ValidateSemantics();
+    for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->ValidateSemantics();
+    }
 }
 
 void CasePNode::Interpret() const
