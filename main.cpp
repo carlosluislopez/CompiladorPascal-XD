@@ -48,10 +48,10 @@ int main(int argc, char *argv[])
         for(std::list<StatementNode*>::iterator it = listaStatement->begin(); it != listaStatement->end(); it++)
         {
             StatementNode *sentence = *it;
-            xml += sentence->ToXML(0);
-            //sentence->ValidateSemantics();
+            //xml += sentence->ToXML(0);
+            sentence->ValidateSemantics();
         }
-
+        cout << "Semantica Correcta" << '\n';
         cout << xml << '\n';
 
     }catch(LexicalException &lexEx)

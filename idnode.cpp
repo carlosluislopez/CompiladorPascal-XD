@@ -12,8 +12,10 @@ IdNode::~IdNode()
 
 BaseType * IdNode::ValidateSemantics() const
 {
-
-    return symbolTable->getVariableType(Name);
+    BaseType *type = symbolTable->getVariableType(Name);
+    if(type == 0)
+        throw SemanticException("No esta definido el Id: '" + Name +"';");
+    return type;
 }
 
 ExpresionValue * IdNode::Interpret() const

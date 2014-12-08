@@ -206,7 +206,7 @@ void Parser::Lista_DeclaracionesP()
     if(this->currentToken->Type == Rw_Var || currentToken->Type == Id)
     {
         Declaracion();
-        Lista_Declaraciones();
+        Lista_DeclaracionesP();
     }else{ /* EPSILON */ }
 }
 
@@ -247,7 +247,7 @@ void Parser::Declaracion()
             if(symbolTable->IsExist(name))
                 throw SemanticException("Ya esta definido el Id: " + name + "; Line: " + util.toString(line) + ", Column: " + util.toString(col));
 
-            symbolTable->addGlobalVariable(id, type);
+            symbolTable->addGlobalVariable(name, type);
         }
 
         //if(symbolTable->IsExist(id))
@@ -268,20 +268,21 @@ list<string> * Parser::DeclaracionP()
     currentToken = nextToken();
     if(currentToken->Type == Comma)
         listId = DeclaracionP();
-    else if (currentToken->Type == Colon)
+
+    if (currentToken->Type == Colon)
     {
         if(listId == 0)
         {
             listId = new list<string>();
         }
         listId->insert(listId->begin(), id);
-        return listId;
+        //return listId;
     }
     else
     {
         throw ParserException("Se esperaba un ':'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
     }
-    return new list<string>();
+    return listId;
 }
 
 BaseType * Parser::Tipo()
