@@ -332,7 +332,10 @@ void Parser::Procedimiento()
         if(currentToken->Type != Rw_Begin)
             throw ParserException("Se esperaba un Begin; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
         currentToken = nextToken();
-        Lista_SentenciasP();
+
+        StatementNode *statementNode = Sentencia();
+        list<StatementNode*> *listStatement = Lista_SentenciasP();
+        listStatement->insert(listStatement->begin(), statementNode);
 
         if(currentToken->Type != Rw_End)
             throw ParserException("Se esperaba un End; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));

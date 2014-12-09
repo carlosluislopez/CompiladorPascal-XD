@@ -10,6 +10,15 @@ IfNode::~IfNode()
 
 void IfNode::ValidateSemantics() const
 {
+    BaseType *typeCondition = Condition->ValidateSemantics();
+    if(typeCondition->type == BaseTypeBool)
+        throw SemanticException("La condicion debe ser una expresion boleana");
+
+    for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->ValidateSemantics();
+    }
 }
 
 void IfNode::Interpret() const

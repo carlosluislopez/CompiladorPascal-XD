@@ -11,7 +11,10 @@ CaseNode::~CaseNode()
 
 void CaseNode::ValidateSemantics() const
 {
-    Condition->ValidateSemantics();
+    BaseType *typeCondition = Condition->ValidateSemantics();
+    if(!(typeCondition->type == BaseTypeInt || typeCondition->type == BaseTypeChar))
+        throw SemanticException("La condicion del case debe ser Int o Char");
+
     for(std::list<CasePNode*>::iterator it = CaseList->begin(); it != CaseList->end(); it++)
     {
         CasePNode *caseP = *it;

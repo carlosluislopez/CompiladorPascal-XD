@@ -15,7 +15,9 @@ void DoWhileNode::ValidateSemantics() const
         StatementNode *sentence = *it;
         sentence->ValidateSemantics();
     }
-    Condition->ValidateSemantics();
+    BaseType *typeCondition = Condition->ValidateSemantics();
+    if(typeCondition->type != BaseTypeBool)
+        throw SemanticException("La condicion debe ser una Expresion Boleana");
 }
 
 void DoWhileNode::Interpret() const

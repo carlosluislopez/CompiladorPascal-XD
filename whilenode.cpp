@@ -10,7 +10,10 @@ WhileNode::~WhileNode()
 
 void WhileNode::ValidateSemantics() const
 {
-    Condition->ValidateSemantics();
+    BaseType* typeCondition = Condition->ValidateSemantics();
+    if(typeCondition->type != BaseTypeBool)
+        throw SemanticException("La condicion del While debe ser una Expresion Boleana");
+
     for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
     {
         StatementNode *sentence = *it;

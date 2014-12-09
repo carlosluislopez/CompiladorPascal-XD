@@ -41,6 +41,7 @@ BaseType * TypeTable::getType(string name)
         if(ut.toLower(type->Name) == ut.toLower(name))
             return type->Type;
     }
+    throw SemanticException("No existe el tipo de datos: '" + name +"'");
     return 0;
 }
 
@@ -48,6 +49,9 @@ void TypeTable::setType(string name, BaseType *type){
     TypeDefined * newType = new TypeDefined();
     newType->Name = name;
     newType->Type = type;
+
+    if(IsExist(name))
+        throw SemanticException("Ya esta definido el tipo de dato: '" + name +"'");
 
     Types->insert(Types->end(), newType);
 }
