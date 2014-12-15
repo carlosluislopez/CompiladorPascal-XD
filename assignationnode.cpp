@@ -15,8 +15,10 @@ void AssignationNode::ValidateSemantics() const
     RightValue->ValidateSemantics();
 }
 
-void AssignationNode::Interpret() const
+void AssignationNode::Interpret()
 {
+    ExpresionValue *value = RightValue->Interpret();
+    LeftValue->AssignValue(value);
 }
 
 

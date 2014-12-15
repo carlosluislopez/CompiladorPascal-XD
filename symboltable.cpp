@@ -112,6 +112,7 @@ void SymbolTable::addGlobalVariable(string name, BaseType* type){
     Variable *newVariable = new Variable();
     newVariable->Name = name;
     newVariable->Type = type;
+    newVariable->Value = 0;
     GlobalVariables->insert(GlobalVariables->end(), newVariable);
 }
 
@@ -120,8 +121,54 @@ void SymbolTable::addLocalVariable(string name, BaseType* type){
     Variable *newVariable = new Variable();
     newVariable->Name = name;
     newVariable->Type = type;
+    newVariable->Value = 0;
     LocalVariables->insert(LocalVariables->end(), newVariable);
 }
+
+
+void SymbolTable::setValueVariable(string variableName, ExpresionValue *variableValue){
+    Utileria ut;
+    Variable *varTemp = 0;
+    for(std::list<Variable*>::iterator it = LocalVariables->begin(); it != LocalVariables->end(); it++)
+    {
+        Variable *var = *it;
+        if(ut.toLower(var->Name) == ut.toLower(variableName))
+            varTemp = var;
+    }
+    if(varTemp == 0){
+        for(std::list<Variable*>::iterator it = GlobalVariables->begin(); it != GlobalVariables->end(); it++)
+        {
+            Variable *var = *it;
+            if(ut.toLower(var->Name) == ut.toLower(variableName))
+                varTemp = var;
+        }
+    }
+    if(varTemp == 0)
+        throw SemanticException("No existe la variable: " + variableName + ";");
+
+    varTemp->Value = variableValue;
+}
+
+ExpresionValue * SymbolTable::getVariableValue(string variableName){
+    Utileria ut;
+    for(std::list<Variable*>::iterator it = LocalVariables->begin(); it != LocalVariables->end(); it++)
+    {
+        Variable *var = *it;
+        if(ut.toLower(var->Name) == ut.toLower(variableName))
+            return var->Value;
+    }
+
+    for(std::list<Variable*>::iterator it = GlobalVariables->begin(); it != GlobalVariables->end(); it++)
+    {
+        Variable *var = *it;
+        if(ut.toLower(var->Name) == ut.toLower(variableName))
+            return var->Value;
+    }
+    return 0;
+}
+
+
+
 
 
 

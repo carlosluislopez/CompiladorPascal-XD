@@ -2,10 +2,18 @@
 
 ForNode::ForNode()
 {
+    Id = 0;
+    InitialValue = 0;
+    FinalValue = 0;
+    Code = 0;
 }
 
 ForNode::~ForNode()
 {
+    delete Id;
+    delete InitialValue;
+    delete FinalValue;
+    delete Code;
 }
 
 void ForNode::ValidateSemantics() const
@@ -20,8 +28,9 @@ void ForNode::ValidateSemantics() const
     }
 }
 
-void ForNode::Interpret() const
+void ForNode::Interpret()
 {
+
 }
 
 

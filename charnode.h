@@ -5,6 +5,7 @@
 #include "BaseType.h"
 #include "ExpresionValue.h"
 #include "chartype.h"
+#include "charvalue.h"
 
 class CharNode : public ExpresionNode
 {
@@ -12,7 +13,7 @@ public:
     CharNode();
     ~CharNode();
     BaseType *ValidateSemantics() const;
-    ExpresionValue *Interpret() const;
+    ExpresionValue *Interpret();
     string ToXML(int identation);
     string Value;
 };

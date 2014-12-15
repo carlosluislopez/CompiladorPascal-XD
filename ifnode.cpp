@@ -2,10 +2,16 @@
 
 IfNode::IfNode()
 {
+    Condition = 0;
+    Code = 0;
+    CodeElse = 0;
 }
 
 IfNode::~IfNode()
 {
+    delete Condition;
+    delete Code;
+    delete CodeElse;
 }
 
 void IfNode::ValidateSemantics() const
@@ -19,10 +25,36 @@ void IfNode::ValidateSemantics() const
         StatementNode *sentence = *it;
         sentence->ValidateSemantics();
     }
+
+    for(std::list<StatementNode*>::iterator it = CodeElse->begin(); it != CodeElse->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->ValidateSemantics();
+    }
 }
 
-void IfNode::Interpret() const
+void IfNode::Interpret()
 {
+    ExpresionValue *conditionValue = Condition->Interpret();
+    bool result = util.toBoolFromString(conditionValue->ToString());
+    if(result)
+    {
+        if(Code == 0)
+            return;
+        for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+        {
+            StatementNode *sentence = *it;
+            sentence->Interpret();
+        }
+    }else{
+        if(CodeElse == 0)
+            return;
+        for(std::list<StatementNode*>::iterator it = CodeElse->begin(); it != CodeElse->end(); it++)
+        {
+            StatementNode *sentence = *it;
+            sentence->Interpret();
+        }
+    }
 }
 
 

@@ -11,13 +11,18 @@ BoolType::~BoolType()
 
 
 bool BoolType::IsAssignable(BaseType *type) const{
-    return true;
+    if(type->type == BaseTypeBool
+       || type->type == BaseTypeInt
+      )
+        return true;
+
+    return false;
 }
 
 ExpresionValue * BoolType::GetDefaultValue() const{
-    return 0;
+    return new BoolValue(false);
 }
 
-ExpresionValue * BoolType::Parse(string inputValue) const{
-    return 0;
+ExpresionValue * BoolType::Parse(string inputValue){
+    return new BoolValue(util.toBoolFromString(inputValue));
 }

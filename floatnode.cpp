@@ -13,8 +13,8 @@ BaseType * FloatNode::ValidateSemantics() const{
     return new FloatType();
 }
 
-ExpresionValue * FloatNode::Interpret() const{
-    return 0;
+ExpresionValue * FloatNode::Interpret(){
+    return new FloatValue(util.toFloatFromString(Value));
 }
 
 string FloatNode::ToXML(int identation){

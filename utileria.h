@@ -17,9 +17,13 @@ public:
     string toString(int);
     string toStringFloat(float);
     string toStringBool(bool);
+    string toStringChar(char);
     string toLower(string);
     string toLower(char);
     string getMeIdentation(int identation);
+    int toIntFromString(string);
+    float toFloatFromString(string);
+    bool toBoolFromString(string);
 };
 
 #endif // UTILERIA_H

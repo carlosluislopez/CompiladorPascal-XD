@@ -10,7 +10,7 @@ using namespace std;
 class ExpresionValue
 {
 public:
-    virtual string ToXML(int identation) = 0;
+    virtual string ToString() = 0;
     Utileria util;
 };
 

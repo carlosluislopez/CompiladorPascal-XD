@@ -2,10 +2,14 @@
 
 WhileNode::WhileNode()
 {
+    Condition = 0;
+    Code = 0;
 }
 
 WhileNode::~WhileNode()
 {
+    delete Condition;
+    delete Code;
 }
 
 void WhileNode::ValidateSemantics() const
@@ -21,8 +25,20 @@ void WhileNode::ValidateSemantics() const
     }
 }
 
-void WhileNode::Interpret() const
+void WhileNode::Interpret()
 {
+    ExpresionValue *conditionValue = Condition->Interpret();
+    bool result = util.toBoolFromString(conditionValue->ToString());
+    while(result)
+    {
+        for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+        {
+            StatementNode *sentence = *it;
+            sentence->Interpret();
+        }
+        conditionValue = Condition->Interpret();
+        result = util.toBoolFromString(conditionValue->ToString());
+    }
 }
 
 

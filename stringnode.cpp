@@ -12,8 +12,8 @@ BaseType * StringNode::ValidateSemantics() const{
     return new StringType();
 }
 
-ExpresionValue * StringNode::Interpret() const{
-    return 0;
+ExpresionValue * StringNode::Interpret(){
+    return new StringValue(Value);
 }
 
 string StringNode::ToXML(int identation){

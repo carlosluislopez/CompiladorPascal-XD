@@ -30,8 +30,20 @@ BaseType * ExpOperationNode::ValidateSemantics() const{
     throw SemanticException("No se puede elevar tipos distintos a numeros");
 }
 
-ExpresionValue * ExpOperationNode::Interpret() const{
-    return 0;
+ExpresionValue * ExpOperationNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+
+    int base = util.toIntFromString(leftValue->ToString());
+    int expo = util.toIntFromString(rightValue->ToString());
+    int result = 1;
+
+    while(expo > 0){
+        result = result + (result * base);
+        expo--;
+    }
+
+    return new IntValue(result);
 }
 
 string ExpOperationNode::ToXML(int identation){

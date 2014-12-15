@@ -26,7 +26,7 @@ class BaseType
 public:
     virtual bool IsAssignable(BaseType *type) const = 0;
     virtual ExpresionValue *GetDefaultValue() const = 0;
-    virtual ExpresionValue *Parse(string inputValue) const = 0;
+    virtual ExpresionValue *Parse(string inputValue) = 0;
     Utileria util;
     BaseTypeType type;
 };

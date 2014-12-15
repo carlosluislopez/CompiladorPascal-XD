@@ -33,7 +33,32 @@ BaseType * SumOperatorNode::ValidateSemantics() const{
     throw SemanticException("No se puede sumar tipos distintos a numeros");
 }
 
-ExpresionValue * SumOperatorNode::Interpret() const{
+ExpresionValue * SumOperatorNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+    BaseType *TypeOperation = ValidateSemantics();
+
+
+    if(TypeOperation->type == BaseTypeInt)
+    {
+        float result = (util.toFloatFromString(leftValue->ToString()) + util.toFloatFromString(rightValue->ToString()));
+        return new IntValue((int)result);
+    }
+
+    if(TypeOperation->type == BaseTypeFloat)
+    {
+        float result = (util.toFloatFromString(leftValue->ToString()) + util.toFloatFromString(rightValue->ToString()));
+        return new FloatValue(result);
+    }
+
+    if(TypeOperation->type == BaseTypeString)
+    {
+        string result = (leftValue->ToString() + rightValue->ToString());
+        return new StringValue(result);
+    }
+
+    throw SemanticException("Esta tratando de sumar tipos nos validos");
+
     return 0;
 }
 

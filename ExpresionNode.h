@@ -10,7 +10,7 @@ class ExpresionNode
 {
 public:
     virtual BaseType *ValidateSemantics() const = 0;
-    virtual ExpresionValue *Interpret() const = 0;
+    virtual ExpresionValue *Interpret() = 0;
     virtual string ToXML(int identation) = 0;
     Utileria util;
 };

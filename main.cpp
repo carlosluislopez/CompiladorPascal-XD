@@ -50,21 +50,30 @@ int main(int argc, char *argv[])
             StatementNode *sentence = *it;
             //xml += sentence->ToXML(0);
             sentence->ValidateSemantics();
+            sentence->Interpret();
         }
         cout << "Semantica Correcta" << '\n';
         cout << xml << '\n';
 
     }catch(LexicalException &lexEx)
     {
+        cout << "LexicalException:" << '\n';
         cout << lexEx.what() << '\n';
     }
     catch(ParserException &parEx)
     {
+        cout << "ParserException:" << '\n';
         cout << parEx.what() << '\n';
     }
     catch(SemanticException &semEx)
     {
+        cout << "SemanticException:" << '\n';
         cout << semEx.what() << '\n';
+    }
+    catch(exception &excEx)
+    {
+        cout << "Exception:" << '\n';
+        cout << excEx.what() << '\n';
     }
 
 //    while(current->Type != EndOfFile)

@@ -13,9 +13,10 @@ BaseType * IntNode::ValidateSemantics() const{
     return new IntType();
 }
 
-ExpresionValue * IntNode::Interpret() const{
-    return 0;
+ExpresionValue * IntNode::Interpret(){
+    return new IntValue(util.toIntFromString(Value));
 }
+
 
 string IntNode::ToXML(int identation){
     string xml = "";

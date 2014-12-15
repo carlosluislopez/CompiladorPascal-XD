@@ -11,13 +11,18 @@ CharType::~CharType()
 
 
 bool CharType::IsAssignable(BaseType *type) const{
-    return true;
+    if(type->type == BaseTypeChar
+       || type->type == BaseTypeString
+      )
+        return true;
+
+    return false;
 }
 
 ExpresionValue * CharType::GetDefaultValue() const{
-    return 0;
+    return new CharValue('\0');
 }
 
-ExpresionValue * CharType::Parse(string inputValue) const{
-    return 0;
+ExpresionValue * CharType::Parse(string inputValue){
+    return new CharValue(inputValue.c_str()[0]);
 }

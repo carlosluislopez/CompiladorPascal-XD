@@ -13,7 +13,7 @@ BaseType * BinaryNode::ValidateSemantics() const{
     return 0;
 }
 
-ExpresionValue * BinaryNode::Interpret() const{
+ExpresionValue * BinaryNode::Interpret(){
     return 0;
 }
 

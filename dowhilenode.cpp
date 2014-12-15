@@ -2,10 +2,14 @@
 
 DoWhileNode::DoWhileNode()
 {
+    Condition = 0;
+    Code = 0;
 }
 
 DoWhileNode::~DoWhileNode()
 {
+    delete Condition;
+    delete Code;
 }
 
 void DoWhileNode::ValidateSemantics() const
@@ -20,8 +24,20 @@ void DoWhileNode::ValidateSemantics() const
         throw SemanticException("La condicion debe ser una Expresion Boleana");
 }
 
-void DoWhileNode::Interpret() const
+void DoWhileNode::Interpret()
 {
+    ExpresionValue *conditionValue = Condition->Interpret();
+    bool result = util.toBoolFromString(conditionValue->ToString());
+    do
+    {
+        for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+        {
+            StatementNode *sentence = *it;
+            sentence->Interpret();
+        }
+        conditionValue = Condition->Interpret();
+        result = util.toBoolFromString(conditionValue->ToString());
+    }while(result);
 }
 
 

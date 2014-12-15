@@ -10,14 +10,22 @@ StringType::~StringType()
 }
 
 bool StringType::IsAssignable(BaseType *type) const{
-    return true;
+    if(type->type == BaseTypeString
+       || type->type == BaseTypeInt
+       || type->type == BaseTypeFloat
+       || type->type == BaseTypeChar
+       || type->type == BaseTypeBool
+      )
+        return true;
+
+    return false;
 }
 
 
 ExpresionValue * StringType::GetDefaultValue() const{
-    return 0;
+    return new StringValue("");
 }
 
-ExpresionValue * StringType::Parse(string inputValue) const{
-    return 0;
+ExpresionValue * StringType::Parse(string inputValue){
+    return new StringValue(inputValue);
 }

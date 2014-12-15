@@ -11,7 +11,7 @@ public:
     BinaryNode();
     ~BinaryNode();
     BaseType *ValidateSemantics() const;
-    ExpresionValue *Interpret() const;
+    ExpresionValue *Interpret();
     string ToXML(int identation);
     string Value;
 };

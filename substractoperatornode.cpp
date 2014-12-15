@@ -31,7 +31,26 @@ BaseType * SubstractOperatorNode::ValidateSemantics() const{
     throw SemanticException("No se puede restar tipos distintos a numeros");
 }
 
-ExpresionValue * SubstractOperatorNode::Interpret() const{
+ExpresionValue * SubstractOperatorNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+    BaseType *TypeOperation = ValidateSemantics();
+
+
+    if(TypeOperation->type == BaseTypeInt)
+    {
+        float result = (util.toFloatFromString(leftValue->ToString()) - util.toFloatFromString(rightValue->ToString()));
+        return new IntValue((int)result);
+    }
+
+    if(TypeOperation->type == BaseTypeFloat)
+    {
+        float result = (util.toFloatFromString(leftValue->ToString()) - util.toFloatFromString(rightValue->ToString()));
+        return new FloatValue(result);
+    }
+
+    throw SemanticException("Esta tratando de sumar tipos nos validos");
+
     return 0;
 }
 

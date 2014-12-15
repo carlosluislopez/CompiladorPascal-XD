@@ -60,7 +60,12 @@ SOURCES += main.cpp \
     floattype.cpp \
     booltype.cpp \
     chartype.cpp \
-    symboltable.cpp
+    symboltable.cpp \
+    intvalue.cpp \
+    floatvalue.cpp \
+    stringvalue.cpp \
+    boolvalue.cpp \
+    charvalue.cpp
 
 HEADERS += \
     token.h \
@@ -123,4 +128,9 @@ HEADERS += \
     booltype.h \
     chartype.h \
     symboltable.h \
-    Variable.h
+    Variable.h \
+    intvalue.h \
+    floatvalue.h \
+    stringvalue.h \
+    boolvalue.h \
+    charvalue.h

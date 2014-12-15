@@ -3,6 +3,7 @@
 
 #include "BaseType.h"
 #include "ExpresionValue.h"
+#include "Values.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
     BaseType *ValidateSemantics() const;
     bool IsAssignable(BaseType *type) const;
     ExpresionValue *GetDefaultValue() const;
-    ExpresionValue *Parse(string inputValue) const;
+    ExpresionValue *Parse(string inputValue);
 };
 
 #endif // STRINGTYPE_H

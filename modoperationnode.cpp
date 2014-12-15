@@ -32,7 +32,7 @@ BaseType * ModOperationNode::ValidateSemantics() const{
     throw SemanticException("No se puede elevar tipos distintos a numeros");
 }
 
-ExpresionValue * ModOperationNode::Interpret() const{
+ExpresionValue * ModOperationNode::Interpret(){
     return 0;
 }
 

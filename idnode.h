@@ -11,8 +11,9 @@ public:
     IdNode();
     ~IdNode();
     BaseType *ValidateSemantics() const;
-    ExpresionValue *Interpret() const;
+    ExpresionValue *Interpret();
     string ToXML(int identation);
+    void AssignValue(ExpresionValue *value);
     string Name;
     Accesor *AccesorList;
     SymbolTable *symbolTable;

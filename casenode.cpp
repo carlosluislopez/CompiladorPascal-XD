@@ -28,7 +28,7 @@ void CaseNode::ValidateSemantics() const
     }
 }
 
-void CaseNode::Interpret() const
+void CaseNode::Interpret()
 {
 }
 

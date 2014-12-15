@@ -13,7 +13,7 @@ public:
     ~PrintNode();
     ExpresionNode *Value;
     void ValidateSemantics() const;
-    void Interpret() const;
+    void Interpret();
     string ToXML(int identation);
 };
 #endif // PRINTNODE_H

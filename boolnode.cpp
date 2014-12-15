@@ -13,8 +13,8 @@ BaseType * BoolNode::ValidateSemantics() const{
     return new BoolType();
 }
 
-ExpresionValue * BoolNode::Interpret() const{
-    return 0;
+ExpresionValue * BoolNode::Interpret(){
+    return new BoolValue(util.toBoolFromString(Value));
 }
 
 string BoolNode::ToXML(int identation){

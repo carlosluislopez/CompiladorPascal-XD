@@ -5,6 +5,7 @@
 #include "BaseType.h"
 #include "ExpresionValue.h"
 #include "booltype.h"
+#include "boolvalue.h"
 
 class BoolNode : public ExpresionNode
 {
@@ -12,7 +13,7 @@ public:
     BoolNode();
     ~BoolNode();
     BaseType *ValidateSemantics() const;
-    ExpresionValue *Interpret() const;
+    ExpresionValue *Interpret();
     string ToXML(int identation);
     string Value;
 };

@@ -13,8 +13,9 @@ BaseType * CharNode::ValidateSemantics() const{
     return new CharType();
 }
 
-ExpresionValue * CharNode::Interpret() const{
-    return 0;
+ExpresionValue * CharNode::Interpret()
+{
+    return new CharValue(Value.c_str()[0]);
 }
 
 string CharNode::ToXML(int identation){

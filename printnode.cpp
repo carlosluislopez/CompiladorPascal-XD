@@ -13,10 +13,10 @@ void PrintNode::ValidateSemantics() const
     Value->ValidateSemantics();
 }
 
-void PrintNode::Interpret() const
+void PrintNode::Interpret()
 {
-    //ExpresionValue *value = Value->Interpret();
-    //cout<<value<<endl;
+    ExpresionValue *value = Value->Interpret();
+    cout<<value->ToString()<<endl;
 }
 
 

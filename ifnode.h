@@ -12,7 +12,7 @@ public:
     ~IfNode();
 
     void ValidateSemantics() const;
-    void Interpret() const;
+    void Interpret();
     string ToXML(int identation);
 
     ExpresionNode *Condition;

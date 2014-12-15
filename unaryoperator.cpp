@@ -16,8 +16,10 @@ BaseType * UnaryOperator::ValidateSemantics() const{
     return new BoolType();
 }
 
-ExpresionValue * UnaryOperator::Interpret() const{
-    return 0;
+ExpresionValue * UnaryOperator::Interpret(){
+    ExpresionValue *leftValue = OperandNode->Interpret();
+    bool result = !util.toBoolFromString(leftValue->ToString());
+    return new BoolValue(result);
 }
 
 string UnaryOperator::ToXML(int identation){

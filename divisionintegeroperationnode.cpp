@@ -21,8 +21,13 @@ BaseType * DivisionIntegerOperationNode::ValidateSemantics() const{
     return new IntType();
 }
 
-ExpresionValue * DivisionIntegerOperationNode::Interpret() const{
-    return 0;
+ExpresionValue * DivisionIntegerOperationNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+
+    int result = util.toIntFromString(leftValue->ToString()) / util.toIntFromString(rightValue->ToString());
+
+    return new IntValue(result);
 }
 
 string DivisionIntegerOperationNode::ToXML(int identation){

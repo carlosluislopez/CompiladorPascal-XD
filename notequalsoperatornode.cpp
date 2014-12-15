@@ -28,11 +28,34 @@ BaseType * NotEqualsOperatorNode::ValidateSemantics() const{
       ))
         throw SemanticException("Esta tratando de comparar tipos invalidos");
 
+    if(leftTypeBaseType->type != rightTypeBaseType->type)
+        throw SemanticException("Esta tratando de comparar tipos invalidos");
+
     return new BoolType();
 }
 
-ExpresionValue * NotEqualsOperatorNode::Interpret() const{
-    return 0;
+ExpresionValue * NotEqualsOperatorNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+
+    BaseType * leftTypeBaseType = LeftOperandNode->ValidateSemantics();
+    int result = false;
+    if(leftTypeBaseType->type == BaseTypeInt)
+        result = (util.toIntFromString(leftValue->ToString()) != util.toIntFromString(rightValue->ToString()));
+
+    if(leftTypeBaseType->type == BaseTypeFloat)
+        result = (util.toFloatFromString(leftValue->ToString()) != util.toFloatFromString(rightValue->ToString()));
+
+    if(leftTypeBaseType->type == BaseTypeString)
+        result = (leftValue->ToString() != rightValue->ToString());
+
+    if(leftTypeBaseType->type == BaseTypeChar)
+        result = (leftValue->ToString().c_str()[0] != rightValue->ToString().c_str()[0]);
+
+    if(leftTypeBaseType->type == BaseTypeBool)
+        result = (util.toBoolFromString(leftValue->ToString()) != util.toBoolFromString(rightValue->ToString()));
+
+    return new BoolValue(result);
 }
 
 string NotEqualsOperatorNode::ToXML(int identation){

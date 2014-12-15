@@ -10,13 +10,18 @@ IntType::~IntType()
 }
 
 bool IntType::IsAssignable(BaseType *type) const{
-    return true;
+    if(type->type == BaseTypeFloat
+       || type->type == BaseTypeInt
+      )
+        return true;
+
+    return false;
 }
 
 ExpresionValue * IntType::GetDefaultValue() const{
-    return 0;
+    return new IntValue(0);
 }
 
-ExpresionValue * IntType::Parse(string inputValue) const{
-    return 0;
+ExpresionValue * IntType::Parse(string inputValue){
+    return new IntValue(util.toIntFromString(inputValue));
 }

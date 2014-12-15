@@ -12,7 +12,7 @@ public:
     ForNode();
     ~ForNode();
     void ValidateSemantics() const;
-    void Interpret() const;
+    void Interpret();
     string ToXML(int identation);
 
     IdNode *Id;

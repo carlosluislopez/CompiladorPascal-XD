@@ -27,6 +27,9 @@ public:
     static BaseType * getVariableType(string variableName);
     static void addGlobalVariable(string name, BaseType* type);
     static void addLocalVariable(string name, BaseType* type);
+
+    static void setValueVariable(string variableName, ExpresionValue *variableValue);
+    static ExpresionValue * getVariableValue(string variableName);
 };
 
 #endif // SYMBOLTABLE_H

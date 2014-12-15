@@ -13,7 +13,7 @@ BaseType * HexadecimalNode::ValidateSemantics() const{
     return 0;
 }
 
-ExpresionValue * HexadecimalNode::Interpret() const{
+ExpresionValue * HexadecimalNode::Interpret(){
     return 0;
 }
 

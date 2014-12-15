@@ -18,9 +18,13 @@ BaseType * IdNode::ValidateSemantics() const
     return type;
 }
 
-ExpresionValue * IdNode::Interpret() const
+ExpresionValue * IdNode::Interpret()
 {
-    return 0;
+    return symbolTable->getVariableValue(Name);
+}
+
+void IdNode::AssignValue(ExpresionValue *value){
+    symbolTable->setValueVariable(Name, value);
 }
 
 string IdNode::ToXML(int identation)

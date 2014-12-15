@@ -11,13 +11,18 @@ FloatType::~FloatType()
 
 
 bool FloatType::IsAssignable(BaseType *type) const{
-    return true;
+    if(type->type == BaseTypeInt
+       || type->type == BaseTypeFloat
+      )
+        return true;
+
+    return false;
 }
 
 ExpresionValue * FloatType::GetDefaultValue() const{
-    return 0;
+    return new FloatValue(0);
 }
 
-ExpresionValue * FloatType::Parse(string inputValue) const{
-    return 0;
+ExpresionValue * FloatType::Parse(string inputValue){
+    return new FloatValue(util.toFloatFromString(inputValue));
 }

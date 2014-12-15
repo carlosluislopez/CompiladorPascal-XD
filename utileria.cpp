@@ -30,6 +30,14 @@ std::string Utileria::toStringBool(bool obj)
     return objStr;
 }
 
+std::string Utileria::toStringChar(char obj)
+{
+    std::ostringstream objStream;
+    objStream << obj;
+    std::string objStr(objStream.str());
+    return objStr;
+}
+
 
 string Utileria::toLower(string symbol)
 {
@@ -61,3 +69,48 @@ string Utileria::getMeIdentation(int identation)
         str += " ";
     return str;
 }
+
+
+
+int Utileria::toIntFromString(string text)
+{
+    int result;
+    stringstream convert(text);
+
+    if (!(convert >> result) )
+        result = 0;
+
+    return result;
+}
+
+float Utileria::toFloatFromString(string text)
+{
+    float result;
+    stringstream convert(text);
+
+    if (!(convert >> result) )
+        result = 0;
+
+    return result;
+}
+
+
+bool Utileria::toBoolFromString(string text)
+{
+    bool result = false;
+    if(toLower(text) == "true")
+        return true;
+
+    if(toLower(text) == "false")
+        return false;
+
+    return result;
+}
+
+
+
+
+
+
+
+

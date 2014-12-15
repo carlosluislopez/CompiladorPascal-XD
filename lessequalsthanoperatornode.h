@@ -9,7 +9,7 @@ public:
     LessEqualsThanOperatorNode();
     ~LessEqualsThanOperatorNode();
     BaseType *ValidateSemantics() const;
-    ExpresionValue *Interpret() const;
+    ExpresionValue *Interpret();
     string ToXML(int identation);
 };
 

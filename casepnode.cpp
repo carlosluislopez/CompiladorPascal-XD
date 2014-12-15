@@ -23,7 +23,7 @@ void CasePNode::ValidateSemantics() const
     }
 }
 
-void CasePNode::Interpret() const
+void CasePNode::Interpret()
 {
 }
 

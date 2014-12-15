@@ -24,8 +24,13 @@ BaseType * DivisionOperatorNode::ValidateSemantics() const{
     return new FloatType();
 }
 
-ExpresionValue * DivisionOperatorNode::Interpret() const{
-    return 0;
+ExpresionValue * DivisionOperatorNode::Interpret(){
+    ExpresionValue *leftValue = LeftOperandNode->Interpret();
+    ExpresionValue *rightValue = RightOperandNode->Interpret();
+
+    int result = util.toFloatFromString(leftValue->ToString()) / util.toFloatFromString(rightValue->ToString());
+
+    return new FloatValue(result);
 }
 
 string DivisionOperatorNode::ToXML(int identation){
