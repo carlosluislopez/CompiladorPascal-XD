@@ -711,8 +711,13 @@ StatementNode * Parser::For()
         currentToken = nextToken();
         ExpresionNode *initialValue = ExpresionBooleana();
 
+        bool increment = true;
         if(currentToken->Type == Rw_To || currentToken->Type == Rw_Downto)
+        {
+            if(currentToken->Type == Rw_Downto)
+                increment = false;
             currentToken = nextToken();
+        }
         else
             throw ParserException("Se esperaba un 'To' o 'Downto'; Line: " + util.toString(currentToken->Line) + ", Column: " + util.toString(currentToken->Column));
 
@@ -733,6 +738,7 @@ StatementNode * Parser::For()
         forNode->InitialValue = initialValue;
         forNode->FinalValue = finalValue;
         forNode->Code = code;
+        forNode->Increment = increment;
 
         return forNode;
     }else

@@ -2,10 +2,14 @@
 
 CasePNode::CasePNode()
 {
+    Condition = 0;
+    Code = 0;
 }
 
 CasePNode::~CasePNode()
 {
+    delete Condition;
+    delete Code;
 }
 
 
@@ -25,6 +29,11 @@ void CasePNode::ValidateSemantics() const
 
 void CasePNode::Interpret()
 {
+    for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->Interpret();
+    }
 }
 
 

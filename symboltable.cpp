@@ -112,7 +112,7 @@ void SymbolTable::addGlobalVariable(string name, BaseType* type){
     Variable *newVariable = new Variable();
     newVariable->Name = name;
     newVariable->Type = type;
-    newVariable->Value = 0;
+    newVariable->Value = type->GetDefaultValue();
     GlobalVariables->insert(GlobalVariables->end(), newVariable);
 }
 
@@ -121,7 +121,7 @@ void SymbolTable::addLocalVariable(string name, BaseType* type){
     Variable *newVariable = new Variable();
     newVariable->Name = name;
     newVariable->Type = type;
-    newVariable->Value = 0;
+    newVariable->Value = type->GetDefaultValue();
     LocalVariables->insert(LocalVariables->end(), newVariable);
 }
 

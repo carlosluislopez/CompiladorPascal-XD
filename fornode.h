@@ -4,6 +4,7 @@
 #include "StatementNode.h"
 #include "idnode.h"
 #include "ExpresionNode.h"
+#include "symboltable.h"
 #include <list>
 
 class ForNode : public StatementNode
@@ -19,6 +20,8 @@ public:
     ExpresionNode *InitialValue;
     ExpresionNode *FinalValue;
     list<StatementNode*> * Code;
+    bool Increment;
+    SymbolTable *symbolTable;
 };
 
 #endif // FORNODE_H

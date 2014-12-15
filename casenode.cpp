@@ -2,10 +2,16 @@
 
 CaseNode::CaseNode()
 {
+    Condition = 0;
+    CaseList = 0;
+    CodeElse = 0;
 }
 
 CaseNode::~CaseNode()
 {
+    delete Condition;
+    delete CaseList;
+    delete CodeElse;
 }
 
 
@@ -18,6 +24,8 @@ void CaseNode::ValidateSemantics() const
     for(std::list<CasePNode*>::iterator it = CaseList->begin(); it != CaseList->end(); it++)
     {
         CasePNode *caseP = *it;
+        if(typeCondition->type != caseP->Condition->ValidateSemantics()->type)
+            throw SemanticException("Las condiciones de cada caso deben ser del mismo tipo");
         caseP->ValidateSemantics();
     }
 
@@ -30,6 +38,37 @@ void CaseNode::ValidateSemantics() const
 
 void CaseNode::Interpret()
 {
+    BaseType *typeCondition = Condition->ValidateSemantics();
+    ExpresionValue *conditionValue = Condition->Interpret();
+
+    for(std::list<CasePNode*>::iterator it = CaseList->begin(); it != CaseList->end(); it++)
+    {
+        CasePNode *caseP = *it;
+        ExpresionValue *casepValue = caseP->Condition->Interpret();
+        if(typeCondition->type == BaseTypeInt)
+        {
+            if(util.toIntFromString(casepValue->ToString()) == util.toIntFromString(conditionValue->ToString()))
+            {
+                caseP->Interpret();
+                return;
+            }
+        }
+
+        if(typeCondition->type == BaseTypeChar)
+        {
+            if(casepValue->ToString()[0] == conditionValue->ToString()[0])
+            {
+                caseP->Interpret();
+                return;
+            }
+        }
+    }
+
+    for(std::list<StatementNode*>::iterator it = CodeElse->begin(); it != CodeElse->end(); it++)
+    {
+        StatementNode *sentence = *it;
+        sentence->Interpret();
+    }
 }
 
 

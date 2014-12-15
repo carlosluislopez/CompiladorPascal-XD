@@ -6,6 +6,8 @@ ForNode::ForNode()
     InitialValue = 0;
     FinalValue = 0;
     Code = 0;
+    Increment = true;
+    symbolTable = SymbolTable::getInstance();
 }
 
 ForNode::~ForNode()
@@ -18,9 +20,19 @@ ForNode::~ForNode()
 
 void ForNode::ValidateSemantics() const
 {
-    Id->ValidateSemantics();
-    InitialValue->ValidateSemantics();
-    FinalValue->ValidateSemantics();
+    BaseType *IdType = Id->ValidateSemantics();
+    BaseType *InitialType = InitialValue->ValidateSemantics();
+    BaseType *FinalType = FinalValue->ValidateSemantics();
+
+    if(IdType->type != BaseTypeInt)
+        throw SemanticException("El Id debe ser tipo Entero");
+
+    if(InitialType->type != BaseTypeInt)
+        throw SemanticException("El valor inicial debe ser tipo Entero");
+
+    if(FinalType->type != BaseTypeInt)
+        throw SemanticException("El valor final debe ser tipo Entero");
+
     for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
     {
         StatementNode *sentence = *it;
@@ -30,7 +42,35 @@ void ForNode::ValidateSemantics() const
 
 void ForNode::Interpret()
 {
+    ExpresionValue *initialValue = InitialValue->Interpret();
+    ExpresionValue *finalValue = FinalValue->Interpret();
 
+    Id->AssignValue(initialValue);
+    int idValue = util.toIntFromString(symbolTable->getVariableValue(Id->Name)->ToString());
+    int finalIntValue = util.toIntFromString(finalValue->ToString());
+
+    if(Increment)
+    {
+        while(idValue <= finalIntValue){
+            for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+            {
+                StatementNode *sentence = *it;
+                sentence->Interpret();
+            }
+            idValue++;
+            Id->AssignValue(new IntValue(idValue));
+        }
+    }else{
+        while(idValue >= finalIntValue){
+            for(std::list<StatementNode*>::iterator it = Code->begin(); it != Code->end(); it++)
+            {
+                StatementNode *sentence = *it;
+                sentence->Interpret();
+            }
+            idValue--;
+            Id->AssignValue(new IntValue(idValue));
+        }
+    }
 }
 
 
